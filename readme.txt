@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator
 Requires at least: 3.7
 Tested up to: 4.0
-Stable tag: 1.01
+Stable tag: 1.02
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,6 +130,9 @@ Yes it is.
 
 
 == Changelog ==
+
+= 1.02 =
+* Error on svn tag
 
 = 1.01 =
 * Minor CSS fix.
