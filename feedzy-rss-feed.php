@@ -2,10 +2,10 @@
 /**
  * Plugin Name: FEEDZY RSS Feeds by b*web
  * Plugin URI: http://b-website.com/feedzy-rss-feeds-plugin-wordpress-gratuit-utilisant-simplepie
- * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and very easy to use, it allows you to aggregate RSS feeds into your WordPress site through fully customizable shortcodes.
+ * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.				
  * Author: Brice CAPOBIANCO - b*web
  * Author URI: http://b-website.com/
- * Version: 1.0
+ * Version: 1.01
  * Text Domain: feedzy_rss_translate
  */
 
@@ -152,6 +152,14 @@ if (!function_exists('feedzy_rss')) {
 			}
 			//Build element DOM
 			$content .= '<div class="rss_item">';
+			if($thumb == 'yes'){
+				if(!empty($thethumbnail)) { 
+					$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
+					$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$thethumbnail.');" alt="'.$item->get_title().'"></span/></a>';
+				} else {
+					$content .= '<span class="rss_image" style="width:'. $size .'px; height:'. $size .'px;" /></span>';
+				}
+			}
 			$content .= '<span class="title"><a href="'. $item->get_permalink() .'" target="'. $target .'">';
 			if(is_numeric($title) && strlen($item->get_title()) > $title){
 				$content .= preg_replace('/\s+?(\S+)?$/', '', substr($item->get_title(), 0, $title)) .'...';
@@ -159,22 +167,16 @@ if (!function_exists('feedzy_rss')) {
 				$content .= $item->get_title();
 			}
 			$content .= '</a></span>';
-				if(!empty($thethumbnail)) { 
-				$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
-				$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$thethumbnail.');" alt="'.$item->get_title().'"></span/></a>';
-			} else {
-				$content .= '<span class="rss_image" style="width:'. $size .'px; height:'. $size .'px;" /></span>';
-			}
-				$content .= '<div class="rss_content">';
-				if($meta == 'yes'){
+			$content .= '<div class="rss_content">';
+			if($meta == 'yes'){
 				$content .= '<small>'. __( 'Posted by', 'feedzy_rss_translate' ) .' ';
-						if ($author = $item->get_author()) {
+				if ($author = $item->get_author()) {
 					$domain = parse_url($item->get_permalink());
 					$content .= '<a href="http://'. $domain["host"]. '" target="'. $target .'" title="'.$domain["host"].'" >'. $author->get_name() .' </a>';
 				}
 				$content .= __( 'on', 'feedzy_rss_translate' ) .' '. $item->get_date(get_option('date_format')) .' '. __( 'at', 'feedzy_rss_translate' ) .' '. $item->get_date(get_option('time_format'));
-						$content .= '</small>';
-				}
+				$content .= '</small>';
+			}
 			if($summary == 'yes'){
 				$content .= '<p>';
 				$description = trim(strip_tags($item->get_description()));

@@ -1,10 +1,10 @@
 === FEEDZY RSS Feeds ===
-Contributors: Brice CAPOBIANCO
+Contributors: briKou
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8
-Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds
+Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator
 Requires at least: 3.7
 Tested up to: 4.0
-Stable tag: 1.0
+Stable tag: 1.01
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,90 +13,91 @@ FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it agg
 
 == Description ==
 
-FEEDZY RSS Feeds is a small and lightweight plugin. Fast and very easy to use, it allows you to aggregate RSS feeds into your WordPress site through fully customizable shortcodes. 
+FEEDZY RSS Feeds is a small and lightweight RSS aggregator plugin. Fast and very easy to use, it allows you to aggregate multiple RSS feeds into your WordPress site through fully customizable shortcodes. 
 
 The plugin uses the SimplePie CLASS php natively included in WordPress. SimplePie is a RSS parser that can read the information contained in a feed, process it, and finally display it.
 
-FEEDZY RSS Feeds therefore support any additional library and uses only the bare minimum to ensure good performance (minimalistic CSS + cache). 
+FEEDZY RSS Feeds therefore supports any additional library and uses only the bare minimum to ensure good performance (minimalistic CSS + cache). 
 
-You can use this plugin in your widgets and your pages and use the shortcode several times in the same page.
+You may use this plugin in your widgets and your pages and reuse the shortcode several times within the same page.
 
-By activating this plugin, your cover picture will be insert into your RSS feeds. By this way, it will easier for external sites to retrieve image from your feeds.
-
-
-[CHECK OUT THE DEMO](http://b-website.com/feedzy-rss-feeds-plugin-wordpress-gratuit-utilisant-simplepie "Try It!")
+By activating this plugin, your cover picture will be inserted into your RSS feeds. By doing so, you'll make it will easier for external sites to retrieve images from your feeds.
 
 
-Please ask for help or report bugs if something goes wrong. It is the best way to make the community go ahead !
+[CHECK OUT THE DEMO](http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie "Try It!")
+
+
+**Please ask for help or report bugs if anything goes wrong. It is the best way to make the community benefit!**
 
 
  = Shortcode Parameters =
-feeds
 
-* Description : The url of the RSS feed to display. You can use multiple feeds URL separated by commas. The items are displayed in chronological order even if there is several feeds. It may be that you do not see the elements of a single stream if the others are older.
+ **feeds**
+
+* Description : The url of the RSS feed to display. You may use multiple feeds URL separated by commas. The items are displayed in chronological order even if there are several feeds. You might not see the elements of a single stream if the others are older.
 * Format : URL
 * Default : empty
 
 
-max
+**max**
 
-* Description : Number of items to display. It may be that the RSS feeds you want to display has less entries than the number you choose, in this case a maximum number of item will be displayed.
+* Description : Number of items to display. It may happen that the RSS feeds you want to display has less entries than the number you choose, in which case a maximum number of item will be displayed.
 * Format : numeric
 * Default : 5
 
 
-feed_title
+**feed_title**
 
 * Description : Should we display the RSS title ?
 * Format : yes/no
 * Default : yes
 
 
-target
+**target**
 
-* Description : Links can be opened in the same window or a new tab. [See the official doc.](http://www.w3schools.com/tags/att_a_target.asp "HTML <a> target Attribute")
+* Description : Links may be opened in the same window or a new tab. [See the official doc.](http://www.w3schools.com/tags/att_a_target.asp "HTML a target Attribute")
 * Format : _blank/_self/_parent/_top/framename
 * Default : _blank
 
 
-title
+**title**
 
 * Description : Trim the title of the item after X characters. The title will ends with "..." if it has been cropped.
 * Format : numeric
 * Default : empty
 
 
-meta
+**meta**
 
-* Description : Should we display the date of publication and the author name of the recovered item?
+* Description : Should we display the date of publication and the author name of the retrieved item?
 * Format : yes/no
 * Default : yes
 
 
-summary
+**summary**
 
-* Description : Should we display a description (abstract) of the recovered item?
+* Description : Should we display a description (abstract) of the retrieved item?
 * Format : yes/no
 * Default : yes
 
 
-summarylength
+**summarylength**
 
 * Description : Crop description (summary) of the element after X characters. The title will ends with "..." if it has been cropped.
 * Format : numeric
 * Default : empty
 
 
-thumb
+**thumb**
 
 * Description : Should we display the first image of the content if it is available?
 * Format : yes/no
 * Default : yes
 
 
-size
+**size**
 
-* Description : If an image is available and is required to display, you can specify it size in pixels. The image is cropped with CSS to be perfectly square. Do not include "px".
+* Description : If an image is available and is required to display, you may specify its size in pixels. The image is cropped with CSS to be perfectly square. Do not include "px".
 * Format : numeric
 * Default : 10
  
@@ -106,7 +107,7 @@ size
 `[feedzy-rss feeds="http://b-website.com/feed"]`
 
 
-= Advanced examples =
+= Advanced example =
 
 `[feedzy-rss feeds="http://b-website.com/feed" max="2" feed_title="yes" target="_blank" title="50" meta="yes" summary="yes" summarylength="300" thumb="yes" size="100"]`
 
@@ -114,11 +115,11 @@ size
 == Installation ==
 
 1. Upload and activate the plugin (or install it through the WP admin console)
-2. Insert shortode! ;)
+2. Insert shortcode ! ;-)
 
 == Frequently Asked Questions ==
 
-= Is it responsiv frendly? =
+= Is it responsive friendly? =
 
 Yes it is.
 
@@ -129,6 +130,11 @@ Yes it is.
 
 
 == Changelog ==
+
+= 1.01 =
+* Minor CSS fix.
+* Minor PHP changes.
+* Readme.txt updated
 
 = 1.0 =
 * First release.
