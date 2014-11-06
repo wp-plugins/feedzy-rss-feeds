@@ -3,7 +3,7 @@
  * Plugin Name: FEEDZY RSS Feeds by b*web
  * Plugin URI: http://b-website.com/feedzy-rss-feeds-plugin-wordpress-gratuit-utilisant-simplepie
  * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.				
- * Author: Brice CAPOBIANCO - b*web
+ * Author: Brice CAPOBIANCO
  * Author URI: http://b-website.com/
  * Version: 1.02
  * Text Domain: feedzy_rss_translate
@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+
 //Load plugin textdomain
 if (!function_exists('feedzy_rss_load_textdomain')) {
 	function feedzy_rss_load_textdomain() {
@@ -24,18 +25,21 @@ if (!function_exists('feedzy_rss_load_textdomain')) {
 	add_action('init', 'feedzy_rss_load_textdomain');
 }
 
+
 //Enqueue custom CSS
-if (!function_exists('feedzy_rss_enqueue_custom_style')) {
-	function feedzy_rss_enqueue_custom_style() {
-		global $post;
-		if(function_exists('has_shortcode')) {
-			if(isset($post->post_content) AND has_shortcode( $post->post_content, 'feedzy-rss')) { 
-				wp_enqueue_style( 'feedzy_rss_CSS', plugins_url('/feedzy-rss-style.css', __FILE__ ), NULL, NULL);
-			}
-		}
-	}
-	add_action( 'wp_enqueue_scripts', 'feedzy_rss_enqueue_custom_style');
+function register_feedzy_custom_style() {
+	wp_register_style( 'feedzy-CSS', plugins_url('/feedzy-rss-style.css', __FILE__ ), NULL, NULL);
 }
+function print_feedzy_custom_style() {
+	global $enqueueStyle;
+	if ( ! $enqueueStyle )
+		return;
+
+	wp_print_styles('feedzy-CSS');
+}
+add_action('wp_footer', 'print_feedzy_custom_style');
+add_action('init', 'register_feedzy_custom_style');
+
 
 //This function will get an image from the feed
 if (!function_exists('returnImage')) {
@@ -48,6 +52,7 @@ if (!function_exists('returnImage')) {
 	}
 }
  
+
 //This function will filter out image url which we got from previous returnImage() function
 if (!function_exists('scrapeImage')) {
 	function scrapeImage($text) {
@@ -59,9 +64,14 @@ if (!function_exists('scrapeImage')) {
 	}
 }
 
+
 //Main shortcode function
 if (!function_exists('feedzy_rss')) {
 	function feedzy_rss( $atts, $content="" ) {
+		
+		global $enqueueStyle;
+		$enqueueStyle = true;
+	
 		//Retrieve & extract shorcode parameters
 		extract(shortcode_atts(array(  
 			"feeds" 				=> '',  		//comma separated feeds url
@@ -199,6 +209,7 @@ if (!function_exists('feedzy_rss')) {
 	} //end of feedzy_rss
 	add_shortcode( 'feedzy-rss', 'feedzy_rss' );
 }
+
 
 //Insert cover picture to main rss feed
 if (!function_exists('insertThumbnailRSS')) {
