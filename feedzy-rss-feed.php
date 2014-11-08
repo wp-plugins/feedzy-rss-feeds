@@ -3,9 +3,9 @@
  * Plugin Name: FEEDZY RSS Feeds by b*web
  * Plugin URI: http://b-website.com/feedzy-rss-feeds-plugin-wordpress-gratuit-utilisant-simplepie
  * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.				
- * Author: Brice CAPOBIANCO - b*web
+ * Author: Brice CAPOBIANCO
  * Author URI: http://b-website.com/
- * Version: 1.01
+ * Version: 1.4
  * Text Domain: feedzy_rss_translate
  */
 
@@ -14,6 +14,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
 
 //Load plugin textdomain
 if (!function_exists('feedzy_rss_load_textdomain')) {
@@ -24,18 +25,21 @@ if (!function_exists('feedzy_rss_load_textdomain')) {
 	add_action('init', 'feedzy_rss_load_textdomain');
 }
 
+
 //Enqueue custom CSS
-if (!function_exists('feedzy_rss_enqueue_custom_style')) {
-	function feedzy_rss_enqueue_custom_style() {
-		global $post;
-		if(function_exists('has_shortcode')) {
-			if(isset($post->post_content) AND has_shortcode( $post->post_content, 'feedzy-rss')) { 
-				wp_enqueue_style( 'feedzy_rss_CSS', plugins_url('/feedzy-rss-style.css', __FILE__ ), NULL, NULL);
-			}
-		}
-	}
-	add_action( 'wp_enqueue_scripts', 'feedzy_rss_enqueue_custom_style');
+function register_feedzy_custom_style() {
+	wp_register_style( 'feedzy-style', plugins_url('/feedzy-rss-style.css', __FILE__ ), NULL, NULL);
 }
+function print_feedzy_custom_style() {
+	global $feedzyStyle;
+	if ( ! $feedzyStyle )
+		return;
+
+	wp_print_styles('feedzy-style');
+}
+add_action('init', 'register_feedzy_custom_style');
+add_action('wp_footer', 'print_feedzy_custom_style');
+
 
 //This function will get an image from the feed
 if (!function_exists('returnImage')) {
@@ -48,6 +52,7 @@ if (!function_exists('returnImage')) {
 	}
 }
  
+
 //This function will filter out image url which we got from previous returnImage() function
 if (!function_exists('scrapeImage')) {
 	function scrapeImage($text) {
@@ -59,13 +64,18 @@ if (!function_exists('scrapeImage')) {
 	}
 }
 
+
 //Main shortcode function
 if (!function_exists('feedzy_rss')) {
 	function feedzy_rss( $atts, $content="" ) {
+		
+		global $feedzyStyle;
+		$feedzyStyle = true;
+	
 		//Retrieve & extract shorcode parameters
 		extract(shortcode_atts(array(  
 			"feeds" 				=> '',  		//comma separated feeds url
-			"max" 					=> '5',			//number of feeds items
+			"max" 					=> '',			//number of feeds items
 			"feed_title"			=> 'yes',		//display feed title true/false
 			"target"				=> '_blank',	//_blank, _self
 			"title"					=> '', 			//strip title after X char
@@ -73,22 +83,34 @@ if (!function_exists('feedzy_rss')) {
 			"summary"				=> 'yes', 		//strip title
 			"summarylength"			=> '', 			//strip summary after X char
 			"thumb"					=> 'yes', 		//yes, no
-			"size"					=> '150'		//thumbs pixel size
+			"default"				=> '',			//default thumb if no image found (only if thumb is set to yes)
+			"size"					=> ''			//thumbs pixel size
 		), $atts));
 		$count = 0;
 
-		if(!is_numeric($size))
+		if(empty($max) || !ctype_digit($max))
+			$max = '5';
+
+		if(empty($size) || !ctype_digit($size))
 			$size = '150';
+
+		if(!empty($title) && !ctype_digit($title))
+			$title = '';
+
+		if(!empty($summarylength) && !ctype_digit($summarylength))
+			$summarylength = '';
 
 		if (!class_exists('SimplePie'))
 			require_once(ABSPATH . WPINC . '/class-feed.php');
 
 		if (!empty ($feeds)) {
+		
 			$feedURL = explode(',',$feeds);
 			$feedURL = array_splice($feedURL, 0, 3);
 			if (count($feedURL) === 1) {
 				$feedURL = $feedURL[0];
 			};
+	
 		}
 		 
 		//Process SimplePie
@@ -106,15 +128,19 @@ if (!function_exists('feedzy_rss')) {
 		$feed->handle_content_type();
 
 		if ($feed->error()) {
+		
 			$content .= '<div id="message" class="error"><p>'. __( 'Sorry, this feed is currently unavailable or does not exists anymore.', 'feedzy_rss_translate' ) .'</p></div>';
+	
 		}
 
 		$content .= '<div class="feedzy-rss">';
 		
 		if($feed_title == 'yes'){
+			
 			$content .= '<div class="rss_header">';
 			$content .= '<h2><a href="'.  $feed->get_permalink() .'">'. $feed->get_title() .'</a> <span> '. $feed->get_description() .'</span></h2>';
 			$content .= '</div>';
+		
 		}
 
 		//Loop through RSS feed
@@ -127,66 +153,111 @@ if (!function_exists('feedzy_rss')) {
 			//Fetch image thumbnail
 			if($thumb == 'yes'){
 				$thethumbnail = "";			
+				
 				if ($enclosure = $item->get_enclosure()) {
 					foreach ((array) $enclosure->get_link() as $thumbnail){
+						
 						$pattern= '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
 						$imgsrc = $thumbnail;
 						preg_match($pattern, $imgsrc, $matches);
 						$thumbnail = $matches[0];
+						
 						if (!empty($thumbnail)){
+							
 							$thethumbnail = $thumbnail;
 							break;
+						
 						}
+					
 					}
 				}
+				
 				if(empty($thethumbnail)) {		
+					
 					$feedDescription = $item->get_description();
 					$image = returnImage($feedDescription);
 					$thethumbnail = scrapeImage($image);
+				
 				}
+			
 				if(empty($thethumbnail)) {		
+					
 					$feedDescription = $item->get_content();
 					$image = returnImage($feedDescription);
 					$thethumbnail = scrapeImage($image);
+				
 				}
 			}
+			
 			//Build element DOM
 			$content .= '<div class="rss_item">';
 			if($thumb == 'yes'){
-				if(!empty($thethumbnail)) { 
+				 if(!empty($thethumbnail) && !empty($default)){
+
+					$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
+					$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:  none, url('.$thethumbnail.'), url('.$default.');" alt="'.$item->get_title().'"></span/></a>';
+				
+				} else if(!empty($thethumbnail)) { 
+				
 					$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
 					$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$thethumbnail.');" alt="'.$item->get_title().'"></span/></a>';
+				
+				} else if(empty($thethumbnail) && !empty($default)){
+				
+					$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
+					$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$default.');" alt="'.$item->get_title().'"></span/></a>';
+			
 				} else {
+					
 					$content .= '<span class="rss_image" style="width:'. $size .'px; height:'. $size .'px;" /></span>';
+				
 				}
 			}
 			$content .= '<span class="title"><a href="'. $item->get_permalink() .'" target="'. $target .'">';
 			if(is_numeric($title) && strlen($item->get_title()) > $title){
+				
 				$content .= preg_replace('/\s+?(\S+)?$/', '', substr($item->get_title(), 0, $title)) .'...';
+			
 			} else {
+				
 				$content .= $item->get_title();
+		
 			}
 			$content .= '</a></span>';
 			$content .= '<div class="rss_content">';
 			if($meta == 'yes'){
+				
 				$content .= '<small>'. __( 'Posted by', 'feedzy_rss_translate' ) .' ';
+				
 				if ($author = $item->get_author()) {
+					
 					$domain = parse_url($item->get_permalink());
 					$content .= '<a href="http://'. $domain["host"]. '" target="'. $target .'" title="'.$domain["host"].'" >'. $author->get_name() .' </a>';
+				
 				}
+				
 				$content .= __( 'on', 'feedzy_rss_translate' ) .' '. $item->get_date(get_option('date_format')) .' '. __( 'at', 'feedzy_rss_translate' ) .' '. $item->get_date(get_option('time_format'));
 				$content .= '</small>';
+			
 			}
 			if($summary == 'yes'){
+				
 				$content .= '<p>';
 				$description = trim(strip_tags($item->get_description()));
 				$description = trim(chop($description,'[&hellip;]')); 			
+			
 				if(is_numeric($summarylength) && strlen($description) > $summarylength){
+				
 					$content .= preg_replace('/\s+?(\S+)?$/', '', substr($description, 0, $summarylength)) .' […]';
+			
 				} else {
-							$content .= $description .' […]';
+				
+					$content .= $description .' […]';
+			
 				}
-						$content .= '</p>';
+				
+					$content .= '</p>';
+				
 				}
 				$content .= '</div>';
 			$content .= '</div>';
@@ -200,13 +271,16 @@ if (!function_exists('feedzy_rss')) {
 	add_shortcode( 'feedzy-rss', 'feedzy_rss' );
 }
 
+
 //Insert cover picture to main rss feed
 if (!function_exists('insertThumbnailRSS')) {
 	function insertThumbnailRSS($content) {
 	     global $post;
+		 
 	     if ( has_post_thumbnail( $post->ID ) ){
 	          $content = '' . get_the_post_thumbnail( $post->ID, 'thumbnail' ) . '' . $content;
 	     }
+		 
 	     return $content;
 	}
 	add_filter('the_excerpt_rss', 'insertThumbnailRSS');

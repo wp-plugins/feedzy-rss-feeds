@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator
 Requires at least: 3.7
 Tested up to: 4.0
-Stable tag: 1.01
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,13 @@ By activating this plugin, your cover picture will be inserted into your RSS fee
 * Default : yes
 
 
+**default**
+
+* Description : Default thumbnail URL if no image is found in the feed or if the fetched image is offline (fallback). Will be used only if thumb parameter is set to yes.
+* Format : URL
+* Default : empty
+
+
 **size**
 
 * Description : If an image is available and is required to display, you may specify its size in pixels. The image is cropped with CSS to be perfectly square. Do not include "px".
@@ -109,7 +116,7 @@ By activating this plugin, your cover picture will be inserted into your RSS fee
 
 = Advanced example =
 
-`[feedzy-rss feeds="http://b-website.com/feed" max="2" feed_title="yes" target="_blank" title="50" meta="yes" summary="yes" summarylength="300" thumb="yes" size="100"]`
+`[feedzy-rss feeds="http://b-website.com/feed" max="2" feed_title="yes" target="_blank" title="50" meta="yes" summary="yes" summarylength="300" thumb="yes" size="100" default="default-image.jpg"]`
 
 
 == Installation ==
@@ -130,6 +137,17 @@ Yes it is.
 
 
 == Changelog ==
+
+
+= 1.4 =
+* Add "default" parameter to fill image container if no image is fetch or if it is offline
+* Add more control over numeric format in max, size, title & summarylength parameters
+
+= 1.03 =
+* Shortcode can now be displayed everywhere in the page (CSS is loaded via global var)
+
+= 1.02 =
+* Error on svn tag
 
 = 1.01 =
 * Minor CSS fix.
