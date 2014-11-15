@@ -59,7 +59,7 @@ Plugin is now using the TinyMCE API to improve UI and makes it easy to insert sh
 
 
 
-[FULL DOCUMENTAION AND EXAMPLES](http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie "Documentation & examples")
+[FULL DOCUMENTATION AND EXAMPLES](http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie "Documentation & examples")
  
 
 
