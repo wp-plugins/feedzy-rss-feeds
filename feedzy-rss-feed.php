@@ -5,7 +5,7 @@
  * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.				
  * Author: Brice CAPOBIANCO
  * Author URI: http://b-website.com/
- * Version: 1.5.1
+ * Version: 1.5.2
  * Text Domain: feedzy_rss_translate
  */
 
@@ -37,9 +37,26 @@ if (!function_exists('feedzy_rss_load_textdomain')) {
 
 
 /***************************************************************
+ * Add custom meta link on plugin list page
+ ***************************************************************/
+if ( ! function_exists( 'feedzy_meta_links' ) ) {
+	function feedzy_meta_links( $links, $file ) {
+		if ( strpos( $file, 'feedzy-rss-feed.php' ) !== false ) {
+			$links[0] = '<a href="http://b-website.com/" target="_blank"><img src="' . plugins_url('img/icon-bweb.png', __FILE__ ) . '" style="margin-bottom: -4px;" alt="b*web"/></a>&nbsp;&nbsp;'. $links[0];
+			$links = array_merge( $links, array( '<a href="http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie" target="_blank" title="'. __( 'Documentation and examples', 'an-translate' ) .'"><strong style="color:#db3939">'. __( 'Documentation and examples', 'an-translate' ) .'</strong></a>' ) );
+			$links = array_merge( $links, array( '<a href="http://b-website.com/category/plugins" target="_blank" title="'. __( 'More b*web Plugins', 'an-translate' ) .'">'. __( 'More b*web Plugins', 'feedzy_rss_translate' ) .'</a>' ) );
+			$links = array_merge( $links, array( '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8" target="_blank" title="'. __( 'Donate', 'an-translate' ) .'"><strong>'. __( 'Donate', 'an-translate' ) .'</strong></a>' ) );
+		}
+		return $links;
+	}
+	add_filter( 'plugin_row_meta', 'feedzy_meta_links', 10, 2 );
+}
+
+
+/***************************************************************
  * Load plugin files
  ***************************************************************/
-require_once( plugin_dir_path( __FILE__ ) . '/feedzy-rss-feeds-ui.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'feedzy-rss-feeds-ui.php' );
 
 
 /***************************************************************
