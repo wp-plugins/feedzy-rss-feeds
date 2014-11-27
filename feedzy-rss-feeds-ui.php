@@ -9,12 +9,11 @@ function feedzy_add_mce_button() {
 	
 	if ( 'true' == get_user_option( 'rich_editing' ) ) {
 		
-		add_filter( 'mce_external_plugins', 'feedzy_add_tinymce_plugin' );
+		add_filter( 'mce_external_plugins', 'feedzy_tinymce_plugin' );
 		add_filter( 'mce_buttons', 'feedzy_register_mce_button' );
 		
 		// Load stylesheet for tinyMCE button only
 		wp_enqueue_style( 'feedzy-rss-feeds', plugin_dir_url( __FILE__ ) . 'css/feedzy-rss-feeds.css', array(), NULL, NULL);
-		
 	}
 	
 }
@@ -22,9 +21,19 @@ add_action('admin_head', 'feedzy_add_mce_button');
 
 
 /***************************************************************
+ * Load plugin translation for - TinyMCE API
+ ***************************************************************/ 
+function feedzy_add_tinymce_lang( $arr ){
+    $arr[] = plugin_dir_path( __FILE__ ) . 'feedzy-rss-feeds-ui-lang.php';
+    return $arr;
+}
+add_filter( 'mce_external_languages', 'feedzy_add_tinymce_lang', 10, 1 );
+
+
+/***************************************************************
  * Load custom js options - TinyMCE API
  ***************************************************************/ 
-function feedzy_add_tinymce_plugin( $plugin_array ) {
+function feedzy_tinymce_plugin( $plugin_array ) {
 	$plugin_array['feedzy_mce_button'] = plugin_dir_url( __FILE__ ) . '/js/feedzy-rss-feeds-ui.js';
 	return $plugin_array;
 }

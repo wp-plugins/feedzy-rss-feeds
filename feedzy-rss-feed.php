@@ -1,12 +1,13 @@
 <?php
 /**
  * Plugin Name: FEEDZY RSS Feeds by b*web
- * Plugin URI: http://b-website.com/feedzy-rss-feeds-plugin-wordpress-gratuit-utilisant-simplepie
+ * Plugin URI: http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie
  * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.				
  * Author: Brice CAPOBIANCO
  * Author URI: http://b-website.com/
- * Version: 1.5.2
+ * Version: 1.5.4
  * Text Domain: feedzy_rss_translate
+ * Domain Path: /langs
  */
 
 
@@ -43,9 +44,9 @@ if ( ! function_exists( 'feedzy_meta_links' ) ) {
 	function feedzy_meta_links( $links, $file ) {
 		if ( strpos( $file, 'feedzy-rss-feed.php' ) !== false ) {
 			$links[0] = '<a href="http://b-website.com/" target="_blank"><img src="' . plugins_url('img/icon-bweb.png', __FILE__ ) . '" style="margin-bottom: -4px;" alt="b*web"/></a>&nbsp;&nbsp;'. $links[0];
-			$links = array_merge( $links, array( '<a href="http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie" target="_blank" title="'. __( 'Documentation and examples', 'an-translate' ) .'"><strong style="color:#db3939">'. __( 'Documentation and examples', 'an-translate' ) .'</strong></a>' ) );
-			$links = array_merge( $links, array( '<a href="http://b-website.com/category/plugins" target="_blank" title="'. __( 'More b*web Plugins', 'an-translate' ) .'">'. __( 'More b*web Plugins', 'feedzy_rss_translate' ) .'</a>' ) );
-			$links = array_merge( $links, array( '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8" target="_blank" title="'. __( 'Donate', 'an-translate' ) .'"><strong>'. __( 'Donate', 'an-translate' ) .'</strong></a>' ) );
+			$links = array_merge( $links, array( '<a href="http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie" target="_blank" title="'. __( 'Documentation and examples', 'feedzy_rss_translate' ) .'"><strong style="color:#db3939">'. __( 'Documentation and examples', 'feedzy_rss_translate' ) .'</strong></a>' ) );
+			$links = array_merge( $links, array( '<a href="http://b-website.com/category/plugins" target="_blank" title="'. __( 'More b*web Plugins', 'feedzy_rss_translate' ) .'">'. __( 'More b*web Plugins', 'feedzy_rss_translate' ) .'</a>' ) );
+			$links = array_merge( $links, array( '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8" target="_blank" title="'. __( 'Donate', 'feedzy_rss_translate' ) .'"><strong>'. __( 'Donate', 'feedzy_rss_translate' ) .'</strong></a>' ) );
 		}
 		return $links;
 	}
@@ -223,18 +224,51 @@ if (!function_exists('feedzy_rss')) {
 				//Fetch image thumbnail
 				if($thumb == 'yes'){
 					$thethumbnail = "";			
+
 					
 					if ($enclosure = $item->get_enclosure()) {
+												
+						//item thumb
+						if ($thumbnail = $enclosure->get_thumbnail()){
+								
+								$thethumbnail = $thumbnail;	
+						
+						}								
+						
+						//media:thumbnail
+						if(isset($enclosure->thumbnails)){
+
+							foreach ((array) $enclosure->thumbnails as $thumbnail){
+							
+								$thethumbnail = $thumbnail;							
+							
+							}
+						
+						}
+						
+						//enclosure
+						if( $thumbnail = $enclosure->embed() ) {
+						
+							$pattern= '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
+							
+							if (preg_match($pattern, $thumbnail, $matches)){
+								
+								$thethumbnail = $matches[0];
+							
+							}
+
+						}		
+
+						//media:content
 						foreach ((array) $enclosure->get_link() as $thumbnail){
 							
 							$pattern= '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
 							$imgsrc = $thumbnail;
-							preg_match($pattern, $imgsrc, $matches);
-							$thumbnail = $matches[0];
+
 							
-							if (!empty($thumbnail)){
+							if ( preg_match($pattern, $imgsrc, $matches) ){
 								
-								$thethumbnail = $thumbnail;
+								$thethumbnail = $matches[0];;
 								break;
 							
 							}
@@ -242,6 +276,7 @@ if (!function_exists('feedzy_rss')) {
 						}
 					}
 					
+					//description image
 					if(empty($thethumbnail)) {		
 						
 						$feedDescription = $item->get_description();
@@ -250,6 +285,7 @@ if (!function_exists('feedzy_rss')) {
 					
 					}
 				
+					//content image
 					if(empty($thethumbnail)) {		
 						
 						$feedDescription = $item->get_content();
@@ -257,20 +293,29 @@ if (!function_exists('feedzy_rss')) {
 						$thethumbnail = feedzy_scrapeImage($image);
 					
 					}
+					
+					
 				}
 				
+				//Padding ratio based on image size
+				$paddinTop = number_format((15/150)*$size,0);
+				$paddinBottom = number_format((25/150)*$size,0);
+				
 				//Build element DOM
-				$content .= '<div class="rss_item">';
+				$content .= '<div class="rss_item" style="padding: ' . $paddinTop . 'px 0 ' . $paddinBottom . 'px">';
 				if($thumb == 'yes'){
+
 					 if(!empty($thethumbnail)){
 	
 						$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
-						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:  none, url('.$thethumbnail.'), url('.$default.');" alt="'.$item->get_title().'"></span/></a>';
+						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:  none, url('.$thethumbnail.'), url('.$default.');" alt="'.$item->get_title().'"></span/>';
+						$content .= '</a>';
 					
 					} else if(empty($thethumbnail)){
 					
 						$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
-						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$default.');" alt="'.$item->get_title().'"></span/></a>';
+						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$default.');" alt="'.$item->get_title().'"></span/>';
+						$content .= '</a>';
 				
 					}
 				}
