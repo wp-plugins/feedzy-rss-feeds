@@ -29,6 +29,7 @@ function feedzy_add_tinymce_lang( $arr ){
 }
 add_filter( 'mce_external_languages', 'feedzy_add_tinymce_lang', 10, 1 );
 
+
 /***************************************************************
  * Load custom js options - TinyMCE API
  ***************************************************************/ 
@@ -45,9 +46,3 @@ function feedzy_register_mce_button( $buttons ) {
 	array_push( $buttons, 'feedzy_mce_button' );
 	return $buttons;
 }
-
-
-
-
-
-

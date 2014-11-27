@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: FEEDZY RSS Feeds by b*web v1.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-11-27 19:31:59+0000\n"
+"PO-Revision-Date: 2014-11-27 20:21:40+0000\n"
 "Last-Translator: superadminopl <brice.capobianco@openlog.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,41 +20,40 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: feedzy-rss-feed.php:187
+#: feedzy-rss-feed.php:188
 #@ feedzy_rss_translate
 msgid "Sorry, this feed is currently unavailable or does not exists anymore."
 msgstr "Désolé, ce flux est actuellement indisponible ou n'existe plus."
 
-#: feedzy-rss-feed.php:331
+#: feedzy-rss-feed.php:336
 #@ feedzy_rss_translate
 msgid "Posted by"
 msgstr "Publié par"
 
-#: feedzy-rss-feed.php:340
+#: feedzy-rss-feed.php:345
 #@ feedzy_rss_translate
 msgid "on"
 msgstr "le"
 
-#: feedzy-rss-feed.php:340
+#: feedzy-rss-feed.php:345
 #@ feedzy_rss_translate
 msgid "at"
 msgstr "à"
 
-#: feedzy-rss-feed.php:46
-#@ an-translate
-msgid "Documentation and examples"
-msgstr ""
-
 #: feedzy-rss-feed.php:47
-#@ an-translate
+#@ feedzy_rss_translate
+msgid "Documentation and examples"
+msgstr "Documentation and exemples"
+
+#: feedzy-rss-feed.php:48
 #@ feedzy_rss_translate
 msgid "More b*web Plugins"
 msgstr "Plus de plugins b*web"
 
-#: feedzy-rss-feed.php:48
-#@ an-translate
+#: feedzy-rss-feed.php:49
+#@ feedzy_rss_translate
 msgid "Donate"
-msgstr ""
+msgstr "Faire un don"
 
 #: feedzy-rss-feeds-ui-lang.php:11
 #@ feedzy_rss_translate
@@ -135,4 +134,40 @@ msgstr "URL(s) du(des) flux RSS (liste séparée par des virgules)."
 #@ feedzy_rss_translate
 msgid "Should we display the RSS title?"
 msgstr "Doit-on afficher le titre du flux RSS ?"
+
+#. translators: plugin header field 'Name'
+#: feedzy-rss-feed.php:0
+#@ feedzy_rss_translate
+msgid "FEEDZY RSS Feeds by b*web"
+msgstr ""
+
+#. translators: plugin header field 'Description'
+#: feedzy-rss-feed.php:0
+#@ feedzy_rss_translate
+msgid "FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes."
+msgstr "FEEDZY RSS Feeds est un petit plugin léger, rapide et très simple d'utilisation qui vous permet d'agréger des flux RSS dans votre site WordPress grâce à des shortcodes entièrement paramétrables."
+
+#. translators: plugin header field 'Author'
+#: feedzy-rss-feed.php:0
+#@ feedzy_rss_translate
+msgid "Brice CAPOBIANCO"
+msgstr ""
+
+#. translators: plugin header field 'AuthorURI'
+#: feedzy-rss-feed.php:0
+#@ feedzy_rss_translate
+msgid "http://b-website.com/"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: feedzy-rss-feed.php:0
+#@ feedzy_rss_translate
+msgid "1.5.2"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#: feedzy-rss-feed.php:0
+#@ feedzy_rss_translate
+msgid "http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie"
+msgstr "http://b-website.com/feedzy-rss-feeds-plugin-wordpress-gratuit-utilisant-simplepie"
 
