@@ -5,7 +5,7 @@
  * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.				
  * Author: Brice CAPOBIANCO
  * Author URI: http://b-website.com/
- * Version: 1.5.2
+ * Version: 1.5.3
  * Text Domain: feedzy_rss_translate
  */
 
@@ -223,18 +223,51 @@ if (!function_exists('feedzy_rss')) {
 				//Fetch image thumbnail
 				if($thumb == 'yes'){
 					$thethumbnail = "";			
+
 					
 					if ($enclosure = $item->get_enclosure()) {
+												
+						//item thumb
+						if ($thumbnail = $enclosure->get_thumbnail()){
+								
+								$thethumbnail = $thumbnail;	
+						
+						}								
+						
+						//media:thumbnail
+						if(isset($enclosure->thumbnails)){
+
+							foreach ((array) $enclosure->thumbnails as $thumbnail){
+							
+								$thethumbnail = $thumbnail;							
+							
+							}
+						
+						}
+						
+						//enclosure
+						if( $thumbnail = $enclosure->embed() ) {
+						
+							$pattern= '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
+							
+							if (preg_match($pattern, $thumbnail, $matches)){
+								
+								$thethumbnail = $matches[0];
+							
+							}
+
+						}		
+
+						//media:content
 						foreach ((array) $enclosure->get_link() as $thumbnail){
 							
 							$pattern= '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
 							$imgsrc = $thumbnail;
-							preg_match($pattern, $imgsrc, $matches);
-							$thumbnail = $matches[0];
+
 							
-							if (!empty($thumbnail)){
+							if ( preg_match($pattern, $imgsrc, $matches) ){
 								
-								$thethumbnail = $thumbnail;
+								$thethumbnail = $matches[0];;
 								break;
 							
 							}
@@ -242,6 +275,7 @@ if (!function_exists('feedzy_rss')) {
 						}
 					}
 					
+					//description image
 					if(empty($thethumbnail)) {		
 						
 						$feedDescription = $item->get_description();
@@ -250,6 +284,7 @@ if (!function_exists('feedzy_rss')) {
 					
 					}
 				
+					//content image
 					if(empty($thethumbnail)) {		
 						
 						$feedDescription = $item->get_content();
@@ -257,20 +292,29 @@ if (!function_exists('feedzy_rss')) {
 						$thethumbnail = feedzy_scrapeImage($image);
 					
 					}
+					
+					
 				}
 				
+				//Padding ratio based on image size
+				$paddinTop = number_format((15/150)*$size,0);
+				$paddinBottom = number_format((25/150)*$size,0);
+				
 				//Build element DOM
-				$content .= '<div class="rss_item">';
+				$content .= '<div class="rss_item" style="padding: ' . $paddinTop . 'px 0 ' . $paddinBottom . 'px">';
 				if($thumb == 'yes'){
+
 					 if(!empty($thethumbnail)){
 	
 						$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
-						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:  none, url('.$thethumbnail.'), url('.$default.');" alt="'.$item->get_title().'"></span/></a>';
+						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:  none, url('.$thethumbnail.'), url('.$default.');" alt="'.$item->get_title().'"></span/>';
+						$content .= '</a>';
 					
 					} else if(empty($thethumbnail)){
 					
 						$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
-						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$default.');" alt="'.$item->get_title().'"></span/></a>';
+						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$default.');" alt="'.$item->get_title().'"></span/>';
+						$content .= '</a>';
 				
 					}
 				}
