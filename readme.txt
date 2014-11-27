@@ -1,10 +1,10 @@
 === FEEDZY RSS Feeds ===
 Contributors: briKou
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8
-Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator
+Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator, tinyMCE, WYSIWYG, MCE, UI, flux, plugin, WordPress
 Requires at least: 3.7
 Tested up to: 4.0
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,11 @@ Yes it is.
 
 == Changelog ==
 
+
+= 1.5.3 =
+* TinyMCE UI translation
+* Better image fetching 
+* Space between items is calculated based on thumbs size
 
 = 1.5.2 =
 * Plugin meta update
