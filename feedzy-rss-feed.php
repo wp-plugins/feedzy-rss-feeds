@@ -5,7 +5,7 @@
  * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.				
  * Author: Brice CAPOBIANCO
  * Author URI: http://b-website.com/
- * Version: 1.5.4
+ * Version: 1.6
  * Text Domain: feedzy_rss_translate
  * Domain Path: /langs
  */
@@ -308,13 +308,13 @@ if (!function_exists('feedzy_rss')) {
 					 if(!empty($thethumbnail)){
 	
 						$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
-						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:  none, url('.$thethumbnail.'), url('.$default.');" alt="'.$item->get_title().'"></span/>';
+							$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:  none, url('.$thethumbnail.'), url('.$default.');" alt="'.$item->get_title().'"></span/>';
 						$content .= '</a>';
 					
 					} else if(empty($thethumbnail)){
 					
 						$content .= '<a href="'.$item->get_permalink().'" class="rss_image" target="'. $target .'" style="width:'. $size .'px; height:'. $size .'px;" title="'.$item->get_title().'" >';
-						$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$default.');" alt="'.$item->get_title().'"></span/>';
+							$content .= '<span style="width:'. $size .'px; height:'. $size .'px; background-image:url('.$default.');" alt="'.$item->get_title().'"></span/>';
 						$content .= '</a>';
 				
 					}
@@ -381,18 +381,38 @@ if (!function_exists('feedzy_rss')) {
 
 
 /***************************************************************
- * Insert cover picture to main rss feed
+ * Insert cover picture to main rss feed content
  ***************************************************************/
-if (!function_exists('feedzy_insert_thumbnail_RSS')) {
-	function feedzy_insert_thumbnail_RSS($content) {
-	     global $post;
-		 
-	     if ( has_post_thumbnail( $post->ID ) ){
-	          $content = '' . get_the_post_thumbnail( $post->ID, 'thumbnail' ) . '' . $content;
-	     }
-		 
-	     return $content;
-	}
-	add_filter('the_excerpt_rss', 'feedzy_insert_thumbnail_RSS');
-	add_filter('the_content_feed', 'feedzy_insert_thumbnail_RSS');
+function feedzy_insert_thumbnail_RSS($content) {
+	 global $post;
+	 
+	 if ( has_post_thumbnail( $post->ID ) ){
+		  $content = '' . get_the_post_thumbnail( $post->ID, 'thumbnail' ) . '' . $content;
+	 }
+	 
+	 return $content;
 }
+add_filter('the_excerpt_rss', 'feedzy_insert_thumbnail_RSS');
+add_filter('the_content_feed', 'feedzy_insert_thumbnail_RSS');
+
+
+/***************************************************************
+ * Include cover picture (medium) to rss feed enclosure 
+ * and media:content
+ ***************************************************************/
+function feedzy_include_thumbnail_RSS (){
+	 global $post;
+	 
+	 if ( has_post_thumbnail( $post->ID ) ){
+		 
+		$postThumbnailId = get_post_thumbnail_id( $post->ID );
+		$attachmentMeta = wp_get_attachment_metadata( $postThumbnailId );
+		$imageUrl = wp_get_attachment_image_src( $postThumbnailId, 'medium');
+		
+		echo '<enclosure url="' . $imageUrl[0] . '" length="' . filesize( get_attached_file( $postThumbnailId ) ) . '" type="image/jpg" />';				
+		echo '<media:content url="' . $imageUrl[0] . '" width="' . $attachmentMeta['sizes']['medium']['width'] . '" height="' . $attachmentMeta['sizes']['medium']['height'] . '" medium="image" type="' . $attachmentMeta['sizes']['medium']['mime-type'] . '" />';
+	
+	}
+}
+//add_action('rss_item', 'feedzy_include_thumbnail_RSS');
+//add_action('rss2_item', 'feedzy_include_thumbnail_RSS');
