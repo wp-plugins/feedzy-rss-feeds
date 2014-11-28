@@ -9,36 +9,36 @@
 			icon: 'feedzy-icon',
 			onclick: function() {
 				editor.windowManager.open( {
-					title: 'Insert FEEDZY RSS Feeds Shortcode',
+					title: editor.getLang('feedzy_tinymce_plugin.plugin_title'),
 					body: [
 						{
 							type: 'textbox',
 							name: 'feeds',
-							label: 'The feed(s) URL (comma-separated list)',
+							label: editor.getLang('feedzy_tinymce_plugin.feeds'),
 							value: ''
 						},
 						{
 							type: 'textbox',
 							name: 'maximum',
-							label: 'Number of items to display.',
+							label: editor.getLang('feedzy_tinymce_plugin.maximum'),
 							value: ''
 						},
 						{
 							type: 'listbox',
 							name: 'feed_title',
-							label: 'Should we display the RSS title ?',
+							label: editor.getLang('feedzy_tinymce_plugin.feed_title'),
 							'values': [
-								{text: 'Do not specify', value: ''},
-								{text: 'No', value: 'no'},
-								{text: 'Yes', value: 'yes'},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_default'), value: ''},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_no'), value: 'no'},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_yes'), value: 'yes'},
 							]
 						},
 						{
 							type: 'listbox',
 							name: 'target',
-							label: 'Links may be opened in the same window or a new tab.',
+							label: editor.getLang('feedzy_tinymce_plugin.target'),
 							'values': [
-								{text: 'Do not specify', value: ''},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_default'), value: ''},
 								{text: '_blank', value: '_blank'},
 								{text: '_self', value: '_self'},
 								{text: '_parent', value: '_parent'},
@@ -49,61 +49,61 @@
 						{
 							type: 'textbox',
 							name: 'title',
-							label: 'Trim the title of the item after X characters.',
+							label: editor.getLang('feedzy_tinymce_plugin.title'),
 							value: ''
 						},
 						{
 							type: 'listbox',
 							name: 'meta',
-							label: 'Should we display the date of publication and the author name?',
+							label: editor.getLang('feedzy_tinymce_plugin.meta'),
 							'values': [
-								{text: 'Do not specify', value: ''},
-								{text: 'No', value: 'no'},
-								{text: 'Yes', value: 'yes'},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_default'), value: ''},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_no'), value: 'no'},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_yes'), value: 'yes'},
 							]
 						},
 						{
 							type: 'listbox',
 							name: 'summary',
-							label: 'Should we display a description (abstract) of the retrieved item?',
+							label: editor.getLang('feedzy_tinymce_plugin.summary'),
 							'values': [
-								{text: 'Do not specify', value: ''},
-								{text: 'No', value: 'no'},
-								{text: 'Yes', value: 'yes'},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_default'), value: ''},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_no'), value: 'no'},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_yes'), value: 'yes'},
 							]
 						},
 						{
 							type: 'textbox',
 							name: 'summarylength',
-							label: 'Crop description (summary) of the element after X characters.',
+							label: editor.getLang('feedzy_tinymce_plugin.summarylength'),
 							value: ''
 						},
 						{
 							type: 'listbox',
 							name: 'thumb',
-							label: 'Should we display the first image of the content if it is available?',
+							label: editor.getLang('feedzy_tinymce_plugin.thumb'),
 							'values': [
-								{text: 'Do not specify', value: ''},
-								{text: 'No', value: 'no'},
-								{text: 'Yes', value: 'yes'},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_default'), value: ''},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_no'), value: 'no'},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_yes'), value: 'yes'},
 							]
 						},
 						{
 							type: 'textbox',
 							name: 'defaultimg',
-							label: 'Default thumbnail URL if no image is found. ',
+							label: editor.getLang('feedzy_tinymce_plugin.defaultimg'),
 							value: ''
 						},
 						{
 							type: 'textbox',
 							name: 'size',
-							label: 'Thumblails dimension. Do not include "px". Eg: 150',
+							label: editor.getLang('feedzy_tinymce_plugin.size'),
 							value: ''
 						},
 						{
 							type: 'textbox',
 							name: 'keywords_title',
-							label: 'Only display item if title contains specific keyword(s) (comma-separated list/case sensitive).',
+							label: editor.getLang('feedzy_tinymce_plugin.keywords_title'),
 							value: ''
 						}
 					],

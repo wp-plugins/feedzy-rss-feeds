@@ -5,7 +5,6 @@
  */
 .feedzy-rss .rss_item {
 	border-bottom: 1px solid #eee;
-	padding: 1em 0 2em;
 }
 .feedzy-rss .rss_item .title {
 	font-weight: bold;
@@ -26,7 +25,7 @@
 	background-position: 50%;
 }
 .feedzy-rss .rss_item .rss_image {
-	padding: 0.3em 1em 0 0;
+	margin: 0.3em 1em 0 0;
 }
 .feedzy-rss .rss_item .rss_content small {
 	display: block;
