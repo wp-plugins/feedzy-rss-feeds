@@ -32,6 +32,30 @@
 	font-size: 0.9em;
 	font-style:italic;
 }
+
+/*TinyMce UI button*/
 i.mce-i-feedzy-icon {
   background-image: url('../img/feedzy.svg');
+}
+.mce-feedzy-media {
+	padding-right: 25px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	height: 32px;
+}
+.mce-feedzy-media-button {
+	cursor: pointer;
+	width: 28px;
+	height: 28px;
+	display: block;
+	-webkit-font-smoothing: antialiased;
+	float: right;
+	background-color: #F7F7F7;
+	border: 1px solid #DDD;
+	font-size: 30px;
+	color: #777;
+	position: relative;
+	line-height: 28px;
+	text-align: center;
 }

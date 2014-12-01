@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator, tinyMCE, WYSIWYG, MCE, UI, flux, plugin, WordPress
 Requires at least: 3.7
 Tested up to: 4.0
-Stable tag: 1.6
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,12 +22,6 @@ FEEDZY RSS Feeds therefore supports any additional library and uses only the bar
 You may use this plugin in your widgets and your pages and reuse the shortcode several times within the same page.
 
 By activating this plugin, your cover picture will be inserted into your RSS feeds. By doing so, you'll make it will easier for external sites to retrieve images from your feeds.
-
-BETA - need your feed back ;)
-add_action('rss_item', 'feedzy_include_thumbnail_RSS');
-add_action('rss2_item', 'feedzy_include_thumbnail_RSS')
-
-Plugin is now using the TinyMCE API to improve UI and makes it easy to insert shortcodes!
 
 
 [CHECK OUT THE DEMO](http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie "Try It!")
@@ -51,6 +45,8 @@ Plugin is now using the TinyMCE API to improve UI and makes it easy to insert sh
 * size
 * keywords_title
 
+**Plugin is now using the TinyMCE API to improve UI and makes it easy to insert shortcodes!**
+
 
 = Basic example =
 
@@ -65,6 +61,13 @@ Plugin is now using the TinyMCE API to improve UI and makes it easy to insert sh
 
 [FULL DOCUMENTATION AND EXAMPLES](http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie "Documentation & examples")
  
+= Languages =
+
+* English
+* French
+* Serbian [Borisa Djuraskovic](http://www.webhostinghub.com/ "Borisa Djuraskovic")
+
+Become a translator and send me your translation! [Contact-me](http://b-website.com/contact "Contact")
 
 
 == Installation ==
@@ -86,6 +89,11 @@ Yes it is.
 
 
 == Changelog ==
+
+
+= 1.6.1 =
+* Serbian Translation
+* Media upload on TinyMCE popup for default thumb
 
 
 = 1.6 =

@@ -91,6 +91,7 @@
 						{
 							type: 'textbox',
 							name: 'defaultimg',
+							classes : 'feedzy-media', //necessary to call the media library
 							label: editor.getLang('feedzy_tinymce_plugin.defaultimg'),
 							value: ''
 						},
