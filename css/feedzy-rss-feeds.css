@@ -14,12 +14,12 @@
 	display:block;
 	clear: both;
 }
-.feedzy-rss .rss_item a.rss_image {
+.feedzy-rss .rss_item .rss_image {
 	float: left;
 	text-decoration: none;
 	border: none;
 }
-.feedzy-rss .rss_item a.rss_image span{
+.feedzy-rss .rss_item .rss_image span{
 	display:inline-block;
 	background-size: cover;
 	background-position: 50%;
