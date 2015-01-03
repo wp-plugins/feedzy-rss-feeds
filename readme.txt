@@ -3,23 +3,23 @@ Contributors: briKou
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8
 Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator, tinyMCE, WYSIWYG, MCE, UI, flux, plugin, WordPress
 Requires at least: 3.7
-Tested up to: 4.0
-Stable tag: 1.7
+Tested up to: 4.1
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
  
-FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.
+FEEDZY RSS Feeds is a small & lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your site with shortcodes & widgets.
 
 == Description ==
 
-FEEDZY RSS Feeds is a small and lightweight RSS aggregator plugin. Fast and very easy to use, it allows you to aggregate multiple RSS feeds into your WordPress site through fully customizable shortcodes. 
+FEEDZY RSS Feeds is a small and lightweight RSS aggregator plugin. Fast and very easy to use, it allows you to aggregate multiple RSS feeds into your WordPress site through fully customizable shortcodes & widgets.
 
-The plugin uses the SimplePie CLASS php natively included in WordPress. SimplePie is a RSS parser that can read the information contained in a feed, process it, and finally display it.
+The plugin uses the SimplePie php CLASS natively included in WordPress. SimplePie is a RSS parser that can read the information contained in a feed, process it, and finally display it.
 
 FEEDZY RSS Feeds therefore supports any additional library and uses only the bare minimum to ensure good performance (minimalistic CSS + cache). 
 
-You may use this plugin in your widgets and your pages and reuse the shortcode several times within the same page.
+You may use this plugin in your widgets and your pages and reuse the shortcode + widget several times within the same page.
 
 By activating this plugin, your cover picture will be inserted into your RSS feeds. By doing so, you'll make it will easier for external sites to retrieve images from your feeds.
 
@@ -94,9 +94,25 @@ Yes it is.
 
 1. Simple example
 2. Inserting a shortcode in the WYSIWYG
+3. Widget admin
+4. Widget render
 
 
 == Changelog ==
+
+= 2.1 =
+* internationalization of feeds dates and times (date_i18n)
+
+
+= 2.0 =
+* Widget added
+* Translation update
+* Better plugin file structure
+* Improve image fetching with multiple enclosures
+* Tested on WP 4.1 with success!
+
+= 1.7.1 =
+* Fix typo in PHP which cause issue on fetching images
 
 = 1.7 =
 * Minor Template and CSS changes
