@@ -267,8 +267,9 @@ function feedzy_rss($atts, $content = "") {
 					$domain = parse_url($item->get_permalink());
 					$contentMeta .= '<a href="http://' . $domain["host"] . '" target="' . $target . '" title="' . $domain["host"] . '" >' . $author->get_name() . ' </a>';
 				}
-
-				$contentMeta .= __('on', 'feedzy_rss_translate') . ' ' . $item->get_date(get_option('date_format')) . ' ' . __('at', 'feedzy_rss_translate') . ' ' . $item->get_date(get_option('time_format'));
+				
+				
+				$contentMeta .= __('on', 'feedzy_rss_translate') . ' ' . date_i18n( get_option( 'date_format' ), $item->get_date( 'U' ) ) . ' ' . __('at', 'feedzy_rss_translate') . ' ' . date_i18n( get_option( 'time_format' ), $item->get_date( 'U' ) );
 				$contentMeta .= '</small>';
 				
 				//Filter: feedzy_meta_output
