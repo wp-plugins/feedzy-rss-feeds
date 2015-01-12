@@ -88,15 +88,15 @@ function feedzy_rss($atts, $content = "") {
 	
 	//Load SimplePie Instance
 	$feed = new SimplePie();
-	$feed->set_feed_url($feedURL);
-	$feed->enable_cache(true);
-	$feed->enable_order_by_date(true);
-	$feed->set_cache_class('WP_Feed_Cache');
-	$feed->set_file_class('WP_SimplePie_File');
-	$feed->set_cache_duration(apply_filters('wp_feed_cache_transient_lifetime', 7200, $feedURL));
-	do_action_ref_array('wp_feed_options', array($feed, $feedURL));
-	$feed->strip_comments(true);
-	$feed->strip_htmltags(false);
+	$feed->set_feed_url( $feedURL );
+	$feed->enable_cache( true );
+	$feed->enable_order_by_date( true );
+	$feed->set_cache_class( 'WP_Feed_Cache' );
+	$feed->set_file_class( 'WP_SimplePie_File' );
+	$feed->set_cache_duration( apply_filters( 'wp_feed_cache_transient_lifetime', 7200, $feedURL ) );
+	do_action_ref_array( 'wp_feed_options', array( $feed, $feedURL ) );
+	$feed->strip_comments( true );
+	$feed->strip_htmltags( false );
 	$feed->init();
 	$feed->handle_content_type();
 
@@ -235,7 +235,7 @@ function feedzy_rss($atts, $content = "") {
 				$contentThumb .= '</div>';
 
 				//Filter: feedzy_thumb_output
-				$content .= apply_filters( 'feedzy_thumb_output', $contentThumb );
+				$content .= apply_filters( 'feedzy_thumb_output', $contentThumb, $feedURL );
 				
 			}
 			
@@ -253,7 +253,7 @@ function feedzy_rss($atts, $content = "") {
 			$contentTitle .= '</a></span>';
 
 			//Filter: feedzy_title_output
-			$content .= apply_filters( 'feedzy_title_output', $contentTitle );
+			$content .= apply_filters( 'feedzy_title_output', $contentTitle, $feedURL );
 
 			$content .= '<div class="rss_content">';
 
@@ -273,7 +273,7 @@ function feedzy_rss($atts, $content = "") {
 				$contentMeta .= '</small>';
 				
 				//Filter: feedzy_meta_output
-				$content .= apply_filters( 'feedzy_meta_output', $contentMeta );
+				$content .= apply_filters( 'feedzy_meta_output', $contentMeta, $feedURL );
 
 			}
 			if ($summary == 'yes') {
@@ -281,9 +281,9 @@ function feedzy_rss($atts, $content = "") {
 
 				$contentSummary = '';
 				$contentSummary .= '<p>';
-			   
-				$description = trim(strip_tags($item->get_description()));
-				$description = trim(chop($description, '[&hellip;]'));
+
+				$description = $item->get_description();
+				$description = apply_filters( 'feedzy_summary_input', $description, $item->get_content(), $feedURL );
 
 				if (is_numeric($summarylength) && strlen($description) > $summarylength) {
 
@@ -296,7 +296,7 @@ function feedzy_rss($atts, $content = "") {
 				$contentSummary .= '</p>';
 
 				//Filter: feedzy_summary_output
-				$content .= apply_filters( 'feedzy_summary_output', $contentSummary, $item->get_permalink() );
+				$content .= apply_filters( 'feedzy_summary_output', $contentSummary, $item->get_permalink(), $feedURL );
 
 			}
 			$content .= '</div>';
@@ -305,7 +305,19 @@ function feedzy_rss($atts, $content = "") {
 	} //endforeach
 
 	$content .= '</div>';
-	return apply_filters( 'feedzy_global_output', $content );
+	return apply_filters( 'feedzy_global_output', $content, $feedURL );
 	
 }//end of feedzy_rss
 add_shortcode('feedzy-rss', 'feedzy_rss');
+
+
+/***************************************************************
+ * Filter feed description input
+ ***************************************************************/
+function feedzy_summary_input_filter( $description, $content, $feedURL ) {
+	$description = trim( strip_tags( $description ) );
+	$description = trim( chop( $description, '[&hellip;]' ) );
+ 
+    return $description;
+}
+add_filter('feedzy_summary_input', 'feedzy_summary_input_filter', 9, 3);	

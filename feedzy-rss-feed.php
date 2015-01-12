@@ -5,7 +5,7 @@
  * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.				
  * Author: Brice CAPOBIANCO
  * Author URI: http://b-website.com/
- * Version: 2.1
+ * Version: 2.2
  * Text Domain: feedzy_rss_translate
  * Domain Path: /langs
  */
@@ -14,12 +14,6 @@
 /***************************************************************
  * SECURITY : Exit if accessed directly
 ***************************************************************/
-if ( !function_exists('add_action') ) {
-    header('Status: 403 Forbidden');
-    header('HTTP/1.1 403 Forbidden');
-    exit();
-}
-
 if ( !defined('ABSPATH') ) {
 	exit;
 }
@@ -30,7 +24,7 @@ if ( !defined('ABSPATH') ) {
  ***************************************************************/
 function feedzy_rss_load_textdomain() {
 	$path = dirname(plugin_basename( __FILE__ )) . '/langs/';
-	$loaded = load_plugin_textdomain( 'feedzy_rss_translate', false, $path);
+	load_plugin_textdomain( 'feedzy_rss_translate', false, $path);
 }
 add_action('init', 'feedzy_rss_load_textdomain');
 
@@ -39,11 +33,10 @@ add_action('init', 'feedzy_rss_load_textdomain');
  * Add custom meta link on plugin list page
  ***************************************************************/
 function feedzy_meta_links( $links, $file ) {
-	if ( strpos( $file, 'feedzy-rss-feed.php' ) !== false ) {
-		$links[0] = '<a href="http://b-website.com/" target="_blank"><img src="' . plugins_url('img/icon-bweb.svg', __FILE__ ) . '" style="margin-bottom: -4px; width: 18px;" alt="b*web"/></a>&nbsp;&nbsp;'. $links[0];
-		$links[] = '<a href="http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie" target="_blank" title="'. __( 'Documentation and examples', 'feedzy_rss_translate' ) .'"><strong style="color:#db3939">'. __( 'Documentation and examples', 'feedzy_rss_translate' ) .'</strong></a>';
+	if ( $file === 'feedzy-rss-feeds/feedzy-rss-feed.php' ) {
+		$links[] = '<a href="http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie" target="_blank" title="'. __( 'Documentation and examples', 'feedzy_rss_translate' ) .'">'. __( 'Documentation and examples', 'feedzy_rss_translate' ) .'</a>';
 		$links[] = '<a href="http://b-website.com/category/plugins" target="_blank" title="'. __( 'More b*web Plugins', 'feedzy_rss_translate' ) .'">'. __( 'More b*web Plugins', 'feedzy_rss_translate' ) .'</a>';
-		$links[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8" target="_blank" title="'. __( 'Donate', 'feedzy_rss_translate' ) .'"><strong>'. __( 'Donate', 'feedzy_rss_translate' ) .'</strong></a>';
+		$links[] = '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8" target="_blank" title="' . __( 'Donate to this plugin &#187;' ) . '"><strong>' . __( 'Donate to this plugin &#187;' ) . '</strong></a>';
 	}
 	return $links;
 }
@@ -81,11 +74,9 @@ add_action('wp_footer', 'feedzy_print_custom_style');
  ***************************************************************/
 function feedzy_insert_thumbnail_RSS($content) {
 	 global $post;
-	 
 	 if ( has_post_thumbnail( $post->ID ) ){
 		  $content = '' . get_the_post_thumbnail( $post->ID, 'thumbnail' ) . '' . $content;
 	 }
-	 
 	 return $content;
 }
 add_filter('the_excerpt_rss', 'feedzy_insert_thumbnail_RSS');

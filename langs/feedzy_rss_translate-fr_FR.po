@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FEEDZY RSS Feeds by b*web v1.7.1\n"
+"Project-Id-Version: FEEDZY RSS Feeds by b*web v2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-12-16 17:37:04+0000\n"
+"PO-Revision-Date: 2015-01-12 20:00:07+0000\n"
 "Last-Translator: superadminopl <brice.capobianco@openlog.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -25,35 +25,30 @@ msgstr ""
 msgid "Sorry, this feed is currently unavailable or does not exists anymore."
 msgstr "Désolé, ce flux est actuellement indisponible ou n'existe plus."
 
-#: feedzy-rss-feeds-shortcode.php:252
+#: feedzy-rss-feeds-shortcode.php:263
 #@ feedzy_rss_translate
 msgid "Posted by"
 msgstr "Publié par"
 
-#: feedzy-rss-feeds-shortcode.php:260
+#: feedzy-rss-feeds-shortcode.php:272
 #@ feedzy_rss_translate
 msgid "on"
 msgstr "le"
 
-#: feedzy-rss-feeds-shortcode.php:260
+#: feedzy-rss-feeds-shortcode.php:272
 #@ feedzy_rss_translate
 msgid "at"
 msgstr "à"
 
-#: feedzy-rss-feed.php:44
+#: feedzy-rss-feed.php:37
 #@ feedzy_rss_translate
 msgid "Documentation and examples"
-msgstr "Documentation and exemples"
+msgstr "Documentation et exemples"
 
-#: feedzy-rss-feed.php:45
+#: feedzy-rss-feed.php:38
 #@ feedzy_rss_translate
 msgid "More b*web Plugins"
 msgstr "Plus de plugins b*web"
-
-#: feedzy-rss-feed.php:46
-#@ feedzy_rss_translate
-msgid "Donate"
-msgstr "Faire un don"
 
 #: feedzy-rss-feeds-ui-lang.php:11
 #@ feedzy_rss_translate
@@ -176,12 +171,6 @@ msgstr ""
 msgid "http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie"
 msgstr "http://b-website.com/feedzy-rss-feeds-plugin-wordpress-gratuit-utilisant-simplepie"
 
-#. translators: plugin header field 'Version'
-#: feedzy-rss-feed.php:0
-#@ feedzy_rss_translate
-msgid "1.7.1"
-msgstr ""
-
 #: feedzy-rss-feeds-widget.php:10
 #@ feedzy_wp_widget
 msgid "Feedzy RSS Feeds"
@@ -196,4 +185,15 @@ msgstr "Titre du Widget"
 #@ feedzy_rss_translate
 msgid "Intro text"
 msgstr "Texte d'intro"
+
+#. translators: plugin header field 'Version'
+#: feedzy-rss-feed.php:0
+#@ feedzy_rss_translate
+msgid "2.1"
+msgstr ""
+
+#: feedzy-rss-feed.php:39
+#@ default
+msgid "Donate to this plugin &#187;"
+msgstr ""
 
