@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: FEEDZY RSS Feeds by b*web v1.5.2\n"
+"Project-Id-Version: FEEDZY RSS Feeds by b*web v2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-11-27 20:21:40+0000\n"
+"PO-Revision-Date: 2015-01-12 20:00:07+0000\n"
 "Last-Translator: superadminopl <brice.capobianco@openlog.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,40 +20,35 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: feedzy-rss-feed.php:188
+#: feedzy-rss-feeds-shortcode.php:105
 #@ feedzy_rss_translate
 msgid "Sorry, this feed is currently unavailable or does not exists anymore."
 msgstr "Désolé, ce flux est actuellement indisponible ou n'existe plus."
 
-#: feedzy-rss-feed.php:336
+#: feedzy-rss-feeds-shortcode.php:263
 #@ feedzy_rss_translate
 msgid "Posted by"
 msgstr "Publié par"
 
-#: feedzy-rss-feed.php:345
+#: feedzy-rss-feeds-shortcode.php:272
 #@ feedzy_rss_translate
 msgid "on"
 msgstr "le"
 
-#: feedzy-rss-feed.php:345
+#: feedzy-rss-feeds-shortcode.php:272
 #@ feedzy_rss_translate
 msgid "at"
 msgstr "à"
 
-#: feedzy-rss-feed.php:47
+#: feedzy-rss-feed.php:37
 #@ feedzy_rss_translate
 msgid "Documentation and examples"
-msgstr "Documentation and exemples"
+msgstr "Documentation et exemples"
 
-#: feedzy-rss-feed.php:48
+#: feedzy-rss-feed.php:38
 #@ feedzy_rss_translate
 msgid "More b*web Plugins"
 msgstr "Plus de plugins b*web"
-
-#: feedzy-rss-feed.php:49
-#@ feedzy_rss_translate
-msgid "Donate"
-msgstr "Faire un don"
 
 #: feedzy-rss-feeds-ui-lang.php:11
 #@ feedzy_rss_translate
@@ -61,51 +56,61 @@ msgid "Insert FEEDZY RSS Feeds Shortcode"
 msgstr "Insérer un shortcode FEEDZY RSS Feeds"
 
 #: feedzy-rss-feeds-ui-lang.php:13
+#: feedzy-rss-feeds-widget.php:61
 #@ feedzy_rss_translate
 msgid "Number of items to display."
 msgstr "Nombre d’éléments à remonter."
 
 #: feedzy-rss-feeds-ui-lang.php:15
+#: feedzy-rss-feeds-widget.php:65
 #@ feedzy_rss_translate
 msgid "Links may be opened in the same window or a new tab."
 msgstr "Les liens peuvent être ouverts dans la même fenêtre ou dans un nouvel onglet."
 
 #: feedzy-rss-feeds-ui-lang.php:16
+#: feedzy-rss-feeds-widget.php:76
 #@ feedzy_rss_translate
 msgid "Trim the title of the item after X characters."
 msgstr "Rogner le titre de l’élément après X caractères."
 
 #: feedzy-rss-feeds-ui-lang.php:17
+#: feedzy-rss-feeds-widget.php:81
 #@ feedzy_rss_translate
 msgid "Should we display the date of publication and the author name?"
 msgstr "Doit-on afficher la date de publication ainsi que le nom de l’auteur de l’élément ?"
 
 #: feedzy-rss-feeds-ui-lang.php:18
+#: feedzy-rss-feeds-widget.php:85
 #@ feedzy_rss_translate
 msgid "Should we display a description (abstract) of the retrieved item?"
 msgstr "Doit-on afficher la description (le résumé) de l’élément ?"
 
 #: feedzy-rss-feeds-ui-lang.php:19
+#: feedzy-rss-feeds-widget.php:88
 #@ feedzy_rss_translate
 msgid "Crop description (summary) of the element after X characters."
 msgstr "Rogner la description (le résumé) de l’élément après X caractères."
 
 #: feedzy-rss-feeds-ui-lang.php:20
+#: feedzy-rss-feeds-widget.php:93
 #@ feedzy_rss_translate
 msgid "Should we display the first image of the content if it is available?"
 msgstr "Doit-on afficher la première image du contenu si elle est disponible ?"
 
 #: feedzy-rss-feeds-ui-lang.php:21
+#: feedzy-rss-feeds-widget.php:96
 #@ feedzy_rss_translate
 msgid "Default thumbnail URL if no image is found."
 msgstr "URL de la miniature par défaut si aucune image n’est trouvée."
 
 #: feedzy-rss-feeds-ui-lang.php:22
+#: feedzy-rss-feeds-widget.php:100
 #@ feedzy_rss_translate
 msgid "Thumblails dimension. Do not include \"px\". Eg: 150"
 msgstr "Dimensions de la miniature. Ne pas inclure “px”. Ex : 150"
 
 #: feedzy-rss-feeds-ui-lang.php:23
+#: feedzy-rss-feeds-widget.php:104
 #@ feedzy_rss_translate
 msgid "Only display item if title contains specific keyword(s) (comma-separated list/case sensitive)."
 msgstr "Afficher un élément seulement si son titre contient l’un des mots clés spécifiés (liste séparée par des virgules/sensible à la case)"
@@ -126,6 +131,7 @@ msgid "Yes"
 msgstr "Oui"
 
 #: feedzy-rss-feeds-ui-lang.php:12
+#: feedzy-rss-feeds-widget.php:57
 #@ feedzy_rss_translate
 msgid "The feed(s) URL (comma-separated list)."
 msgstr "URL(s) du(des) flux RSS (liste séparée par des virgules)."
@@ -159,15 +165,35 @@ msgstr ""
 msgid "http://b-website.com/"
 msgstr ""
 
-#. translators: plugin header field 'Version'
-#: feedzy-rss-feed.php:0
-#@ feedzy_rss_translate
-msgid "1.5.2"
-msgstr ""
-
 #. translators: plugin header field 'PluginURI'
 #: feedzy-rss-feed.php:0
 #@ feedzy_rss_translate
 msgid "http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie"
 msgstr "http://b-website.com/feedzy-rss-feeds-plugin-wordpress-gratuit-utilisant-simplepie"
+
+#: feedzy-rss-feeds-widget.php:10
+#@ feedzy_wp_widget
+msgid "Feedzy RSS Feeds"
+msgstr ""
+
+#: feedzy-rss-feeds-widget.php:49
+#@ feedzy_rss_translate
+msgid "Widget Title"
+msgstr "Titre du Widget"
+
+#: feedzy-rss-feeds-widget.php:53
+#@ feedzy_rss_translate
+msgid "Intro text"
+msgstr "Texte d'intro"
+
+#. translators: plugin header field 'Version'
+#: feedzy-rss-feed.php:0
+#@ feedzy_rss_translate
+msgid "2.1"
+msgstr ""
+
+#: feedzy-rss-feed.php:39
+#@ default
+msgid "Donate to this plugin &#187;"
+msgstr ""
 
