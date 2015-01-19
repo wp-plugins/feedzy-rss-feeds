@@ -1,5 +1,13 @@
 <?php
 /***************************************************************
+ * SECURITY : Exit if accessed directly
+***************************************************************/
+if ( !defined( 'ABSPATH' ) ) {
+	die( 'Direct acces not allowed!' );
+}
+
+
+/***************************************************************
  * Load the Widget options
  ***************************************************************/
 add_action('widgets_init', create_function('', 'return register_widget("feedzy_wp_widget");'));

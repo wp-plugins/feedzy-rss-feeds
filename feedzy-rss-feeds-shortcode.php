@@ -1,5 +1,13 @@
 <?php
 /***************************************************************
+ * SECURITY : Exit if accessed directly
+***************************************************************/
+if ( !defined( 'ABSPATH' ) ) {
+	die( 'Direct acces not allowed!' );
+}
+
+
+/***************************************************************
  * Get an image from the feed
  ***************************************************************/
 function feedzy_returnImage ($text) {
@@ -48,42 +56,49 @@ function feedzy_rss($atts, $content = "") {
 		"keywords_title" => '' 	//only display item if title contains specific keywords (comma-separated list/case sensitive)
 		), $atts));
 
-	if ($max == '0') {
+	if ( $max == '0' ) {
 		$max = '999';
-	} else if (empty($max) || !ctype_digit($max)) {
+	} else if ( empty( $max ) || !ctype_digit( $max ) ) {
 		$max = '5';
 	}
 
-	if (empty($size) || !ctype_digit($size))
+	if ( empty( $size ) || !ctype_digit( $size ) ){
 		$size = '150';
+	}
 
-	if (!empty($title) && !ctype_digit($title))
+	if ( !empty( $title ) && !ctype_digit( $title ) ){
 		$title = '';
+	}
 
-	if (!empty($keywords_title))
-		$keywords_title = array_map('trim', explode(',', $keywords_title));
+	if ( !empty($keywords_title)){
+		$keywords_title = array_map( 'trim', explode( ',', $keywords_title ) );
+	}
 
-	if (!empty($summarylength) && !ctype_digit($summarylength))
+	if ( !empty( $summarylength ) && !ctype_digit( $summarylength ) ){
 		$summarylength = '';
+	}
 
-	if (!empty($default)) {
+	if ( !empty( $default ) ) {
 		$default = $default;
+	
 	} else {
 		$default = plugins_url('img/feedzy-default.jpg', __FILE__);
 	}
 
 
 
-	if (!class_exists('SimplePie'))
+	if ( !class_exists( 'SimplePie' ) ){
 		require_once(ABSPATH . WPINC . '/class-feed.php');
+	}
 
-	if (!empty($feeds)) {
+	if ( !empty( $feeds ) ) {
 
-		$feedURL = explode(',', $feeds);
-		$feedURL = array_splice($feedURL, 0, 3);
-		if (count($feedURL) === 1) {
+		$feedURL = explode( ',', $feeds );
+		$feedURL = array_splice( $feedURL, 0, 3 );
+		if ( count( $feedURL ) === 1 ) {
 			$feedURL = $feedURL[0];
-		};
+		}
+		
 	}
 	
 	//Load SimplePie Instance
@@ -103,6 +118,7 @@ function feedzy_rss($atts, $content = "") {
 	if ($feed->error()) {
 
 		$content .= '<div id="message" class="error"><p>' . __('Sorry, this feed is currently unavailable or does not exists anymore.', 'feedzy_rss_translate') . '</p></div>';
+	
 	}
 
 	$content .= '<div class="feedzy-rss">';
@@ -112,81 +128,83 @@ function feedzy_rss($atts, $content = "") {
 		$content .= '<div class="rss_header">';
 		$content .= '<h2><a href="' . $feed->get_permalink() . '">' . $feed->get_title() . '</a> <span> ' . $feed->get_description() . '</span></h2>';
 		$content .= '</div>';
+		
 	}
 
 	//Loop through RSS feed
-	foreach ($feed->get_items() as $item) {
+	foreach ( $feed->get_items() as $item ) {
 
 		$continue = true;
 		//Check if keywords are in title
-		if (!empty($keywords_title)) {
+		if ( !empty( $keywords_title ) ) {
 			$continue = false;
-			foreach ($keywords_title as $keyword) {
-				if (strpos($item->get_title(), $keyword) !== false) {
+			foreach ( $keywords_title as $keyword ) {
+				if ( strpos( $item->get_title(), $keyword ) !== false ) {
 					$continue = true;
 				}
 			}
 		}
 
-		if ($continue == true) {
+		if ( $continue == true ) {
 
 			//Count items
-			if ($count >= $max)
+			if ( $count >= $max ){
 				break;
+			}
 			$count++;
 
 			//Fetch image thumbnail
-			if ($thumb == 'yes') {
+			if ( $thumb == 'yes' ) {
 				$thethumbnail = "";
 
 
-				if ($enclosures = $item->get_enclosures()) {
+				if ( $enclosures = $item->get_enclosures() ) {
 					
-					foreach( (array) $enclosures as $enclosure){
+					foreach( (array) $enclosures as $enclosure ){
 
 						//item thumb
-						if ($thumbnail = $enclosure->get_thumbnail()) {
-	
+						if ( $thumbnail = $enclosure->get_thumbnail() ) {
 							$thethumbnail = $thumbnail;
 						}
 	
 						//media:thumbnail
-						if (isset($enclosure->thumbnails)) {
+						if ( isset( $enclosure->thumbnails ) ) {
 	
-							foreach ((array) $enclosure->thumbnails as $thumbnail) {
-	
+							foreach ( (array) $enclosure->thumbnails as $thumbnail ) {
 								$thethumbnail = $thumbnail;
 							}
+							
 						}
 	
 						//enclosure
-						if ($thumbnail = $enclosure->embed()) {
+						if ( $thumbnail = $enclosure->embed() ) {
 	
 							$pattern = '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
 	
-							if (preg_match($pattern, $thumbnail, $matches)) {
-	
+							if ( preg_match( $pattern, $thumbnail, $matches ) ) {
 								$thethumbnail = $matches[0];
 							}
+							
 						}
 	
 						//media:content
-						foreach ( (array) $enclosure->get_link() as $thumbnail) {
+						foreach ( (array) $enclosure->get_link() as $thumbnail ) {
 	
 							$pattern = '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
 							$imgsrc = $thumbnail;
 	
 	
-							if (preg_match($pattern, $imgsrc, $matches)) {
-	
+							if ( preg_match( $pattern, $imgsrc, $matches ) ) {
 								$thethumbnail = $matches[0];
 								break;
 							}
+							
 						}
 						
 						//break loop if thumbnail found
-						if ( ! empty( $thethumbnail ) )
+						if ( ! empty( $thethumbnail ) ) {
 							break;
+						}
 
 					}
 					
@@ -194,11 +212,11 @@ function feedzy_rss($atts, $content = "") {
 
 
 				//content image
-				if (empty($thethumbnail)) {
+				if ( empty( $thethumbnail ) ) {
 
 					$feedDescription = $item->get_content();
-					$image = feedzy_returnImage($feedDescription);
-					$thethumbnail = feedzy_scrapeImage($image);
+					$image = feedzy_returnImage( $feedDescription );
+					$thethumbnail = feedzy_scrapeImage( $image );
 					
 				}
 
@@ -206,29 +224,35 @@ function feedzy_rss($atts, $content = "") {
 				if ( empty( $thethumbnail ) ) {
 					
 					$feedDescription = $item->get_description();
-					$image = feedzy_returnImage($feedDescription);
-					$thethumbnail = feedzy_scrapeImage($image);
+					$image = feedzy_returnImage( $feedDescription );
+					$thethumbnail = feedzy_scrapeImage( $image );
+				
 				}
 				
 			}
 
 			//Padding ratio based on image size
-			$paddinTop = number_format((15 / 150) * $size, 0);
-			$paddinBottom = number_format((25 / 150) * $size, 0);
+			$paddinTop = number_format( (15 / 150) * $size, 0 );
+			$paddinBottom = number_format( (25 / 150) * $size, 0 );
 
 			//Build element DOM
 			$content .= '<div class="rss_item" style="padding: ' . $paddinTop . 'px 0 ' . $paddinBottom . 'px">';
-			if ($thumb == 'yes') {
+			
+			if ( $thumb == 'yes' ) {
 				
 				$contentThumb = '';
 				
 				$contentThumb .= '<div class="rss_image" style="width:' . $size . 'px; height:' . $size . 'px;">';
 				$contentThumb .= '<a href="' . $item->get_permalink() . '" target="' . $target . '" title="' . $item->get_title() . '" >';
 
-				if (!empty($thethumbnail)) {
+				if ( !empty( $thethumbnail  )) {
+					
 					$contentThumb .= '<span style="width:' . $size . 'px; height:' . $size . 'px; background-image:  none, url(' . $thethumbnail . '), url(' . $default . ');" alt="' . $item->get_title() . '"></span/>';
-				} else if (empty($thethumbnail)) {
+				
+				} else if ( empty( $thethumbnail ) ) {
+				
 					$contentThumb .= '<span style="width:' . $size . 'px; height:' . $size . 'px; background-image:url(' . $default . ');" alt="' . $item->get_title() . '"></span/>';
+				
 				}
 				
 				$contentThumb .= '</a>';
@@ -242,12 +266,14 @@ function feedzy_rss($atts, $content = "") {
 			$contentTitle = '';
 			$contentTitle .= '<span class="title"><a href="' . $item->get_permalink() . '" target="' . $target . '">';
 		   
-			if (is_numeric($title) && strlen($item->get_title()) > $title) {
+			if ( is_numeric( $title ) && strlen( $item->get_title() ) > $title ) {
 
-				$contentTitle .= preg_replace('/\s+?(\S+)?$/', '', substr($item->get_title(), 0, $title)) . '...';
+				$contentTitle .= preg_replace( '/\s+?(\S+)?$/', '', substr( $item->get_title(), 0, $title ) ) . '...';
+			
 			} else {
 
 				$contentTitle .= $item->get_title();
+			
 			}
 			
 			$contentTitle .= '</a></span>';
@@ -257,37 +283,39 @@ function feedzy_rss($atts, $content = "") {
 
 			$content .= '<div class="rss_content">';
 
-			if ($meta == 'yes') {
+			if ( $meta == 'yes' ) {
 
 				$contentMeta = '';
-				$contentMeta .= '<small>' . __('Posted by', 'feedzy_rss_translate') . ' ';
+				$contentMeta .= '<small>' . __( 'Posted', 'feedzy_rss_translate' ) . ' ';
 
-				if ($author = $item->get_author()) {
+				if ( $author = $item->get_author() ) {
 
-					$domain = parse_url($item->get_permalink());
-					$contentMeta .= '<a href="http://' . $domain["host"] . '" target="' . $target . '" title="' . $domain["host"] . '" >' . $author->get_name() . ' </a>';
+					$domain = parse_url( $item->get_permalink() );
+					$contentMeta .= __( 'by', 'feedzy_rss_translate' ) . ' <a href="http://' . $domain['host'] . '" target="' . $target . '" title="' . $domain['host'] . '" >' . $author->get_name() . '</a> ';
+
 				}
 				
-				
-				$contentMeta .= __('on', 'feedzy_rss_translate') . ' ' . date_i18n( get_option( 'date_format' ), $item->get_date( 'U' ) ) . ' ' . __('at', 'feedzy_rss_translate') . ' ' . date_i18n( get_option( 'time_format' ), $item->get_date( 'U' ) );
+				$contentMeta .= __( 'on', 'feedzy_rss_translate') . ' ' . date_i18n( get_option( 'date_format' ), $item->get_date( 'U' ) ) . ' ' . __( 'at', 'feedzy_rss_translate' ) . ' ' . date_i18n( get_option( 'time_format' ), $item->get_date( 'U' ) );
 				$contentMeta .= '</small>';
 				
 				//Filter: feedzy_meta_output
 				$content .= apply_filters( 'feedzy_meta_output', $contentMeta, $feedURL );
 
 			}
-			if ($summary == 'yes') {
+			if ( $summary == 'yes' ) {
 
 
 				$contentSummary = '';
 				$contentSummary .= '<p>';
 
+				//Filter: feedzy_summary_input
 				$description = $item->get_description();
 				$description = apply_filters( 'feedzy_summary_input', $description, $item->get_content(), $feedURL );
 
-				if (is_numeric($summarylength) && strlen($description) > $summarylength) {
+				if ( is_numeric( $summarylength ) && strlen( $description ) > $summarylength ) {
 
-					$contentSummary .= preg_replace('/\s+?(\S+)?$/', '', substr($description, 0, $summarylength)) . ' […]';
+					$contentSummary .= preg_replace( '/\s+?(\S+)?$/', '', substr( $description, 0, $summarylength ) ) . ' […]';
+				
 				} else {
 
 					$contentSummary .= $description . ' […]';
@@ -299,16 +327,19 @@ function feedzy_rss($atts, $content = "") {
 				$content .= apply_filters( 'feedzy_summary_output', $contentSummary, $item->get_permalink(), $feedURL );
 
 			}
+			
 			$content .= '</div>';
 			$content .= '</div>';
+			
 		} //endContinue
+		
 	} //endforeach
 
 	$content .= '</div>';
 	return apply_filters( 'feedzy_global_output', $content, $feedURL );
 	
 }//end of feedzy_rss
-add_shortcode('feedzy-rss', 'feedzy_rss');
+add_shortcode( 'feedzy-rss', 'feedzy_rss' );
 
 
 /***************************************************************
