@@ -34,14 +34,14 @@ function feedzy_scrapeImage($text) {
 /***************************************************************
  * Main shortcode function
  ***************************************************************/
-function feedzy_rss($atts, $content = "") {
+function feedzy_rss( $atts, $content = '' ) {
 
 	global $feedzyStyle;
 	$feedzyStyle = true;
 	$count = 0;
 
 	//Retrieve & extract shorcode parameters
-	extract(shortcode_atts(array(
+	extract( shortcode_atts( array(
 		"feeds" => '', 			//comma separated feeds url
 		"max" => '5', 			//number of feeds items (0 for unlimited)
 		"feed_title" => 'yes', 	//display feed title yes/no
@@ -54,7 +54,7 @@ function feedzy_rss($atts, $content = "") {
 		"default" => '', 		//default thumb URL if no image found (only if thumb is set to yes)
 		"size" => '', 			//thumbs pixel size
 		"keywords_title" => '' 	//only display item if title contains specific keywords (comma-separated list/case sensitive)
-		), $atts));
+		), $atts ) );
 
 	if ( $max == '0' ) {
 		$max = '999';
@@ -82,13 +82,13 @@ function feedzy_rss($atts, $content = "") {
 		$default = $default;
 	
 	} else {
-		$default = plugins_url('img/feedzy-default.jpg', __FILE__);
+		$default = plugins_url( 'img/feedzy-default.jpg', __FILE__ );
 	}
 
 
 
 	if ( !class_exists( 'SimplePie' ) ){
-		require_once(ABSPATH . WPINC . '/class-feed.php');
+		require_once( ABSPATH . WPINC . '/class-feed.php' );
 	}
 
 	if ( !empty( $feeds ) ) {
@@ -283,19 +283,35 @@ function feedzy_rss($atts, $content = "") {
 
 			$content .= '<div class="rss_content">';
 
-			if ( $meta == 'yes' ) {
+			
+			//Define Meta args
+			$metaArgs = array(
+						'author' => true,
+						'date' => true,
+						'date_format' => get_option( 'date_format' ),
+						'time_format' => get_option( 'time_format' )
+					);
+					
+			//Filter: feedzy_meta_args
+			$metaArgs = apply_filters( 'feedzy_meta_args', $metaArgs, $feedURL );
+
+			if ( $meta == 'yes' && ( $metaArgs[ 'author' ] || $metaArgs[ 'date' ] ) ) {
 
 				$contentMeta = '';
 				$contentMeta .= '<small>' . __( 'Posted', 'feedzy_rss_translate' ) . ' ';
 
-				if ( $author = $item->get_author() ) {
-
+				if ( $item->get_author() && $metaArgs[ 'author' ] ) {
+					
+					$author = $item->get_author();
 					$domain = parse_url( $item->get_permalink() );
-					$contentMeta .= __( 'by', 'feedzy_rss_translate' ) . ' <a href="http://' . $domain['host'] . '" target="' . $target . '" title="' . $domain['host'] . '" >' . $author->get_name() . '</a> ';
+					$contentMeta .= __( 'by', 'feedzy_rss_translate' ) . ' <a href="http://' . $domain[ 'host' ] . '" target="' . $target . '" title="' . $domain[ 'host' ] . '" >' . $author->get_name() . '</a> ';
 
 				}
 				
-				$contentMeta .= __( 'on', 'feedzy_rss_translate') . ' ' . date_i18n( get_option( 'date_format' ), $item->get_date( 'U' ) ) . ' ' . __( 'at', 'feedzy_rss_translate' ) . ' ' . date_i18n( get_option( 'time_format' ), $item->get_date( 'U' ) );
+				if ( $metaArgs[ 'date' ] ) {
+					$contentMeta .= __( 'on', 'feedzy_rss_translate') . ' ' . date_i18n( $metaArgs[ 'date_format' ], $item->get_date( 'U' ) ) . ' ' . __( 'at', 'feedzy_rss_translate' ) . ' ' . date_i18n( $metaArgs[ 'time_format' ], $item->get_date( 'U' ) );
+				}
+				
 				$contentMeta .= '</small>';
 				
 				//Filter: feedzy_meta_output
