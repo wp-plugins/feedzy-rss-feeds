@@ -40,6 +40,11 @@ function feedzy_rss( $atts, $content = '' ) {
 	$feedzyStyle = true;
 	$count = 0;
 
+	//Load SimplePie if not already
+	if ( !class_exists( 'SimplePie' ) ){
+		require_once( ABSPATH . WPINC . '/class-feed.php' );
+	}
+
 	//Retrieve & extract shorcode parameters
 	extract( shortcode_atts( array(
 		"feeds" => '', 			//comma separated feeds url
@@ -85,12 +90,6 @@ function feedzy_rss( $atts, $content = '' ) {
 		$default = plugins_url( 'img/feedzy-default.jpg', __FILE__ );
 	}
 
-
-
-	if ( !class_exists( 'SimplePie' ) ){
-		require_once( ABSPATH . WPINC . '/class-feed.php' );
-	}
-
 	if ( !empty( $feeds ) ) {
 
 		$feedURL = explode( ',', $feeds );
@@ -100,9 +99,9 @@ function feedzy_rss( $atts, $content = '' ) {
 		}
 		
 	}
-	
-	//Load SimplePie Instance
-	$feed = new SimplePie();
+ 
+ 	//Load SimplePie Instance
+  	$feed = new SimplePie();
 	$feed->set_feed_url( $feedURL );
 	$feed->enable_cache( true );
 	$feed->enable_order_by_date( true );
@@ -111,7 +110,7 @@ function feedzy_rss( $atts, $content = '' ) {
 	$feed->set_cache_duration( apply_filters( 'wp_feed_cache_transient_lifetime', 7200, $feedURL ) );
 	do_action_ref_array( 'wp_feed_options', array( $feed, $feedURL ) );
 	$feed->strip_comments( true );
-	$feed->strip_htmltags( false );
+	$feed->strip_htmltags( array( 'base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style' ) );
 	$feed->init();
 	$feed->handle_content_type();
 
@@ -132,18 +131,10 @@ function feedzy_rss( $atts, $content = '' ) {
 	}
 
 	//Loop through RSS feed
-	foreach ( $feed->get_items() as $item ) {
+	$items = apply_filters( 'feedzy_feed_items', $feed->get_items(), $feedURL );
+	foreach ( (array) $items as $item ) {
 
-		$continue = true;
-		//Check if keywords are in title
-		if ( !empty( $keywords_title ) ) {
-			$continue = false;
-			foreach ( $keywords_title as $keyword ) {
-				if ( strpos( $item->get_title(), $keyword ) !== false ) {
-					$continue = true;
-				}
-			}
-		}
+		$continue = apply_filters( 'feedzy_item_keyword', true, $keywords_title, $item, $feedURL );
 
 		if ( $continue == true ) {
 
@@ -356,15 +347,3 @@ function feedzy_rss( $atts, $content = '' ) {
 	
 }//end of feedzy_rss
 add_shortcode( 'feedzy-rss', 'feedzy_rss' );
-
-
-/***************************************************************
- * Filter feed description input
- ***************************************************************/
-function feedzy_summary_input_filter( $description, $content, $feedURL ) {
-	$description = trim( strip_tags( $description ) );
-	$description = trim( chop( $description, '[&hellip;]' ) );
- 
-    return $description;
-}
-add_filter('feedzy_summary_input', 'feedzy_summary_input_filter', 9, 3);	

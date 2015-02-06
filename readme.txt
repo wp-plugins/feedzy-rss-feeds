@@ -1,10 +1,10 @@
 === FEEDZY RSS Feeds ===
 Contributors: briKou
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8
-Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator, tinyMCE, WYSIWYG, MCE, UI, flux, plugin, WordPress
+Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator, tinyMCE, WYSIWYG, MCE, UI, flux, plugin, WordPress, widget, importer, XML, ATOM, API, parser
 Requires at least: 3.7
 Tested up to: 4.1
-Stable tag: 2.2.2
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,8 @@ By activating this plugin, your cover picture will be inserted into your RSS fee
 
 = Available Hooks =
 
+* feedzy_feed_items
+* feedzy_item_keyword
 * feedzy_thumb_output
 * feedzy_title_output
 * feedzy_meta_args
@@ -101,6 +103,14 @@ Yes it is.
 
 
 == Changelog ==
+
+= 2.3 =
+* New hook: feedzy_feed_items
+* New hook: feedzy_item_keyword
+* Introduce SimplePie native strip_htmltags() method 
+* Use PNG icon as SVG fallback on the visual editor button
+* Improve plugin's files structure
+* readme.txt and hooks documentation update
 
 = 2.2.2 =
 * New hook: feedzy_meta_args
