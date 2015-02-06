@@ -35,7 +35,8 @@
 
 /*TinyMce UI button*/
 i.mce-i-feedzy-icon {
-  background-image: url('../img/feedzy.svg');
+	background-image:  url('../img/feedzy.png');
+	background-image:  none, url('../img/feedzy.svg'), url('../img/feedzy.png');
 }
 .mce-feedzy-media {
 	padding-right: 25px;
