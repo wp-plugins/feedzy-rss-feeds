@@ -17,6 +17,30 @@ add_action( 'wp_footer', 'feedzy_print_custom_style' );
 
 
 /***************************************************************
+ * Get an image from the feed
+ ***************************************************************/
+function feedzy_returnImage ($text) {
+	$text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
+	$pattern = "/<img[^>]+\>/i";
+	preg_match($pattern, $text, $matches);
+	$text = $matches[0];
+	return $text;
+}
+ 
+
+/***************************************************************
+ * Filter out image url which we got from previous returnImage() function
+ ***************************************************************/
+function feedzy_scrapeImage($text) {
+	$pattern = '/src=[\'"]?([^\'" >]+)[\'" >]/';     
+	preg_match($pattern, $text, $link);
+	$link = $link[1];
+	$link = urldecode($link);
+	return $link;
+}
+
+
+/***************************************************************
  * Filter feed description input
  ***************************************************************/
 function feedzy_summary_input_filter( $description, $content, $feedURL ) {

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator, tinyMCE, WYSIWYG, MCE, UI, flux, plugin, WordPress, widget, importer, XML, ATOM, API, parser
 Requires at least: 3.7
 Tested up to: 4.1
-Stable tag: 2.3
+Stable tag: 2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,7 @@ By activating this plugin, your cover picture will be inserted into your RSS fee
 * feedzy_summary_input
 * feedzy_summary_output
 * feedzy_global_output
+* feedzy_thumb_sizes
 
 
 [FULL DOCUMENTATION AND EXAMPLES](http://b-website.com/feedzy-rss-feeds-wordpress-plugin-using-simplepie "Documentation & examples")
@@ -103,6 +104,14 @@ Yes it is.
 
 
 == Changelog ==
+
+= 2.4 =
+* New feature: 'auto' thumbs option added
+* New hook: feedzy_thumb_sizes
+* Fix issue on max number of feeds to display
+* Fix HTML decode in the feed's title
+* Minor PHP improvements
+* readme.txt and hooks documentation update
 
 = 2.3 =
 * New hook: feedzy_feed_items

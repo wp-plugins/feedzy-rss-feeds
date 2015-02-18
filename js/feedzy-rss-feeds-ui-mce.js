@@ -86,6 +86,7 @@
 								{text: editor.getLang('feedzy_tinymce_plugin.text_default'), value: ''},
 								{text: editor.getLang('feedzy_tinymce_plugin.text_no'), value: 'no'},
 								{text: editor.getLang('feedzy_tinymce_plugin.text_yes'), value: 'yes'},
+								{text: editor.getLang('feedzy_tinymce_plugin.text_auto'), value: 'auto'},
 							]
 						},
 						{

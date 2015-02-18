@@ -13,15 +13,15 @@ if ( !defined( 'ABSPATH' ) ) {
 add_action('widgets_init', create_function('', 'return register_widget("feedzy_wp_widget");'));
 class feedzy_wp_widget extends WP_Widget {
 
-	// constructor
+	//Constructor
 	function feedzy_wp_widget() {
         parent::WP_Widget(false, $name = __('Feedzy RSS Feeds', 'feedzy_wp_widget') );
     }
 
-	// widget form creation
+	//Widget form creation
 	function form($instance) {
 
-		// Check values
+		//Check values
 		if( $instance) {
 			$title = esc_attr($instance['title']);
 			$textarea = esc_attr($instance['textarea']);
@@ -71,7 +71,7 @@ class feedzy_wp_widget extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id('target'); ?>"><?php _e('Links may be opened in the same window or a new tab.', 'feedzy_rss_translate'); ?></label>
-			<select name="<?php echo $this->get_field_name('target'); ?>" id="<?php echo $this->get_field_id('target'); ?>" class="widefat">
+			<select id="<?php echo $this->get_field_id('target'); ?>" name="<?php echo $this->get_field_name('target'); ?>" class="widefat">
 			<?php
 				$options = array('_blank', '_parent', '_self', '_top', 'framename');
 				foreach ($options as $option) {
@@ -97,8 +97,27 @@ class feedzy_wp_widget extends WP_Widget {
 			<input class="widefat" id="<?php echo $this->get_field_id('summarylength'); ?>" name="<?php echo $this->get_field_name('summarylength'); ?>" type="text" value="<?php echo $summarylength; ?>" />
 		</p>
 		<p>
-			<input id="<?php echo $this->get_field_id('thumb'); ?>" name="<?php echo $this->get_field_name('thumb'); ?>" type="checkbox" value="1" <?php checked( '1', $thumb ); ?> />
 			<label for="<?php echo $this->get_field_id('thumb'); ?>"><?php _e('Should we display the first image of the content if it is available?', 'feedzy_rss_translate'); ?></label>
+			<select id="<?php echo $this->get_field_id('thumb'); ?>" name="<?php echo $this->get_field_name('thumb'); ?>" class="widefat">
+			<?php			
+				//Fix for versions before 2.3.1
+				if ( $thumb == '1' ){
+					$thumb = 'yes';
+				} else if ( $thumb == '0' ) {
+					$thumb = 'no';
+				}
+
+				$options = array( 
+					array( 'no', __('No', 'feedzy_rss_translate') ),
+				  	array( 'yes', __('Yes', 'feedzy_rss_translate') ),
+					array( 'auto', __('Auto', 'feedzy_rss_translate') )
+				);
+
+				foreach ($options as $option) {
+					echo '<option value="' . $option[0] . '" id="' . $option[0] . '"', $thumb == $option[0] ? ' selected="selected"' : '', '>', $option[1], '</option>';
+				}
+			?>
+			</select>
 		</p>	
 		<p>
 			<label for="<?php echo $this->get_field_id('default'); ?>"><?php _e('Default thumbnail URL if no image is found.', 'feedzy_rss_translate'); ?></label>
@@ -117,60 +136,67 @@ class feedzy_wp_widget extends WP_Widget {
 		
 	}
 
-	// update widget
-	function update($new_instance, $old_instance) {
+	//Update widget
+	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
-		$instance['title'] = strip_tags($new_instance['title']);
-		if ( current_user_can('unfiltered_html') ) {
+		$instance['title'] = strip_tags( $new_instance['title'] );
+		if ( current_user_can( 'unfiltered_html' ) ) {
 			$instance['textarea'] =  $new_instance['textarea'];
 		} else {
-			$instance['textarea'] = stripslashes( wp_filter_post_kses( addslashes($new_instance['textarea']) ) );
+			$instance['textarea'] = stripslashes( wp_filter_post_kses( addslashes( $new_instance['textarea'] ) ) );
 		}
-		$instance['feeds'] = strip_tags($new_instance['feeds']);
-		$instance['max'] = strip_tags($new_instance['max']);
-		$instance['target'] = strip_tags($new_instance['target']);
-		$instance['titlelength'] = strip_tags($new_instance['titlelength']);
-		$instance['meta'] = strip_tags($new_instance['meta']);
-		$instance['summary'] = strip_tags($new_instance['summary']);
-		$instance['summarylength'] = strip_tags($new_instance['summarylength']);
-		$instance['thumb'] = strip_tags($new_instance['thumb']);
-		$instance['default'] = strip_tags($new_instance['default']);
-		$instance['size'] = strip_tags($new_instance['size']);
-		$instance['keywords_title'] = strip_tags($new_instance['keywords_title']);
+		$instance['feeds'] = strip_tags( $new_instance['feeds'] );
+		$instance['max'] = strip_tags( $new_instance['max'] );
+		$instance['target'] = strip_tags( $new_instance['target'] );
+		$instance['titlelength'] = strip_tags( $new_instance['titlelength'] );
+		$instance['meta'] = strip_tags( $new_instance['meta'] );
+		$instance['summary'] = strip_tags( $new_instance['summary'] );
+		$instance['summarylength'] = strip_tags( $new_instance['summarylength'] );
+		$instance['thumb'] = strip_tags( $new_instance['thumb'] );
+		$instance['default'] = strip_tags( $new_instance['default'] );
+		$instance['size'] = strip_tags( $new_instance['size'] );
+		$instance['keywords_title'] = strip_tags( $new_instance['keywords_title'] );
 		return $instance;
 	}
 
-	// display widget
+	//Display widget
 	function widget($args, $instance) {
 		
 		extract( $args );
 		
-		$title = apply_filters('widget_title', $instance['title']);
+		$title = apply_filters( 'widget_title', $instance['title'] );
 		$textarea = apply_filters( 'widget_textarea', empty( $instance['textarea'] ) ? '' : $instance['textarea'], $instance );
 	
 		echo $before_widget;
 		
-		// Display the widget body
+		//Display the widget body
 		echo '<div class="widget-text feedzy_wp_widget_box">';
 
-		// Check if title is set
+		//Check if title is set
 		if ( $title )
 			echo $before_title . $title . $after_title;
 
-		// Check if text intro is set
+		//Check if text intro is set
 		if( isset( $instance['textarea'] ) && !empty( $instance['textarea'] ) )
 			echo '<p class="feedzy-widget-intro">' . wpautop($textarea) . '</p>';
-		
-		
-		$items = array('meta', 'summary', 'thumb');
-		foreach($items as $item){
-			if($instance[$item] == true){
+
+		$items = array( 'meta', 'summary' );
+		foreach( $items as $item ){
+			if( $instance[$item] == true ){
 				$instance[$item] = 'yes';
 			} else {
 				$instance[$item] = 'no';
 			}
 		}
+		
+		//Fix for versions before 2.3.1
+		if ( $instance['thumb'] == '1' ){
+			$instance['thumb'] = 'yes';
+		} else if ( $thumb == '0' ) {
+			$instance['thumb'] = 'no';
+		}
 
+		//Call the shortcode function
 		echo feedzy_rss( array(
 			"feeds" => $instance['feeds'],
 			"max" => $instance['max'],

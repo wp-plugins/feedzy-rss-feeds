@@ -8,30 +8,6 @@ if ( !defined( 'ABSPATH' ) ) {
 
 
 /***************************************************************
- * Get an image from the feed
- ***************************************************************/
-function feedzy_returnImage ($text) {
-	$text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
-	$pattern = "/<img[^>]+\>/i";
-	preg_match($pattern, $text, $matches);
-	$text = $matches[0];
-	return $text;
-}
- 
-
-/***************************************************************
- * Filter out image url which we got from previous returnImage() function
- ***************************************************************/
-function feedzy_scrapeImage($text) {
-	$pattern = '/src=[\'"]?([^\'" >]+)[\'" >]/';     
-	preg_match($pattern, $text, $link);
-	$link = $link[1];
-	$link = urldecode($link);
-	return $link;
-}
-
-
-/***************************************************************
  * Main shortcode function
  ***************************************************************/
 function feedzy_rss( $atts, $content = '' ) {
@@ -55,8 +31,8 @@ function feedzy_rss( $atts, $content = '' ) {
 		"meta" => 'yes', 		//yes, no
 		"summary" => 'yes', 	//strip title
 		"summarylength" => '', 	//strip summary after X char
-		"thumb" => 'yes', 		//yes, no
-		"default" => '', 		//default thumb URL if no image found (only if thumb is set to yes)
+		"thumb" => 'yes', 		//yes, no, auto
+		"default" => '', 		//default thumb URL if no image found (only if thumb is set to yes or auto)
 		"size" => '', 			//thumbs pixel size
 		"keywords_title" => '' 	//only display item if title contains specific keywords (comma-separated list/case sensitive)
 		), $atts ) );
@@ -70,6 +46,8 @@ function feedzy_rss( $atts, $content = '' ) {
 	if ( empty( $size ) || !ctype_digit( $size ) ){
 		$size = '150';
 	}
+	$sizes = array( 'width' => $size, 'height' => $size );
+	$sizes = apply_filters( 'feedzy_thumb_sizes', $sizes, $feedURL );
 
 	if ( !empty( $title ) && !ctype_digit( $title ) ){
 		$title = '';
@@ -91,9 +69,9 @@ function feedzy_rss( $atts, $content = '' ) {
 	}
 
 	if ( !empty( $feeds ) ) {
-
+		
 		$feedURL = explode( ',', $feeds );
-		$feedURL = array_splice( $feedURL, 0, 3 );
+
 		if ( count( $feedURL ) === 1 ) {
 			$feedURL = $feedURL[0];
 		}
@@ -102,17 +80,17 @@ function feedzy_rss( $atts, $content = '' ) {
  
  	//Load SimplePie Instance
   	$feed = new SimplePie();
-	$feed->set_feed_url( $feedURL );
-	$feed->enable_cache( true );
-	$feed->enable_order_by_date( true );
-	$feed->set_cache_class( 'WP_Feed_Cache' );
-	$feed->set_file_class( 'WP_SimplePie_File' );
-	$feed->set_cache_duration( apply_filters( 'wp_feed_cache_transient_lifetime', 7200, $feedURL ) );
+	$feed -> set_feed_url( $feedURL );
+	$feed -> enable_cache( true );
+	$feed -> enable_order_by_date( true );
+	$feed -> set_cache_class( 'WP_Feed_Cache' );
+	$feed -> set_file_class( 'WP_SimplePie_File' );
+	$feed -> set_cache_duration( apply_filters( 'wp_feed_cache_transient_lifetime', 7200, $feedURL ) );
 	do_action_ref_array( 'wp_feed_options', array( $feed, $feedURL ) );
-	$feed->strip_comments( true );
-	$feed->strip_htmltags( array( 'base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style' ) );
-	$feed->init();
-	$feed->handle_content_type();
+	$feed -> strip_comments( true );
+	$feed -> strip_htmltags( array( 'base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style' ) );
+	$feed -> init();
+	$feed -> handle_content_type();
 
 	if ($feed->error()) {
 
@@ -125,7 +103,7 @@ function feedzy_rss( $atts, $content = '' ) {
 	if ($feed_title == 'yes') {
 
 		$content .= '<div class="rss_header">';
-		$content .= '<h2><a href="' . $feed->get_permalink() . '">' . $feed->get_title() . '</a> <span> ' . $feed->get_description() . '</span></h2>';
+		$content .= '<h2><a href="' . $feed->get_permalink() . '" class="rss_title">' . html_entity_decode( $feed->get_title() ) . '</a> <span class="rss_description"> ' . $feed->get_description() . '</span></h2>';
 		$content .= '</div>';
 		
 	}
@@ -145,7 +123,7 @@ function feedzy_rss( $atts, $content = '' ) {
 			$count++;
 
 			//Fetch image thumbnail
-			if ( $thumb == 'yes' ) {
+			if ( $thumb == 'yes' || $thumb == 'auto' ) {
 				$thethumbnail = "";
 
 
@@ -223,31 +201,35 @@ function feedzy_rss( $atts, $content = '' ) {
 			}
 
 			//Padding ratio based on image size
-			$paddinTop = number_format( (15 / 150) * $size, 0 );
-			$paddinBottom = number_format( (25 / 150) * $size, 0 );
+			$paddinTop = number_format( (15 / 150) * $sizes['height'], 0 );
+			$paddinBottom = number_format( (25 / 150) * $sizes['height'], 0 );
 
 			//Build element DOM
 			$content .= '<div class="rss_item" style="padding: ' . $paddinTop . 'px 0 ' . $paddinBottom . 'px">';
 			
-			if ( $thumb == 'yes' ) {
+			if ( $thumb == 'yes' || $thumb == 'auto' ) {
 				
 				$contentThumb = '';
 				
-				$contentThumb .= '<div class="rss_image" style="width:' . $size . 'px; height:' . $size . 'px;">';
-				$contentThumb .= '<a href="' . $item->get_permalink() . '" target="' . $target . '" title="' . $item->get_title() . '" >';
-
-				if ( !empty( $thethumbnail  )) {
+				if ( ( ! empty( $thethumbnail ) && $thumb == 'auto' ) || $thumb == 'yes' ){
 					
-					$contentThumb .= '<span style="width:' . $size . 'px; height:' . $size . 'px; background-image:  none, url(' . $thethumbnail . '), url(' . $default . ');" alt="' . $item->get_title() . '"></span/>';
+					$contentThumb .= '<div class="rss_image" style="width:' . $sizes['width'] . 'px; height:' . $sizes['height'] . 'px;">';
+					$contentThumb .= '<a href="' . $item->get_permalink() . '" target="' . $target . '" title="' . $item->get_title() . '" >';
 				
-				} else if ( empty( $thethumbnail ) ) {
-				
-					$contentThumb .= '<span style="width:' . $size . 'px; height:' . $size . 'px; background-image:url(' . $default . ');" alt="' . $item->get_title() . '"></span/>';
-				
+					if ( !empty( $thethumbnail  )) {
+						
+						$contentThumb .= '<span style="width:' . $sizes['width'] . 'px; height:' . $sizes['height'] . 'px; background-image:  none, url(' . $thethumbnail . '), url(' . $default . ');" alt="' . $item->get_title() . '"></span/>';
+					
+					} else if ( empty( $thethumbnail ) && $thumb == 'yes' ) {
+					
+						$contentThumb .= '<span style="width:' . $sizes['width'] . 'px; height:' . $sizes['height'] . 'px; background-image:url(' . $default . ');" alt="' . $item->get_title() . '"></span/>';
+					
+					}
+
+					$contentThumb .= '</a>';
+					$contentThumb .= '</div>';
+					
 				}
-				
-				$contentThumb .= '</a>';
-				$contentThumb .= '</div>';
 
 				//Filter: feedzy_thumb_output
 				$content .= apply_filters( 'feedzy_thumb_output', $contentThumb, $feedURL );
