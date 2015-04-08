@@ -74,7 +74,8 @@ function feedzy_image_encode( $string ) {
 	$path_parts = pathinfo( $string );
 	$path = $path_parts['dirname'];
 	$file = $path_parts['filename'] . '.' . pathinfo( $url_tab['path'], PATHINFO_EXTENSION );
-
+	$file = rawurldecode( $file );
+	
 	//Return a well encoded image url
 	return $path . '/' . rawurlencode( $file ) . $query;
 }
