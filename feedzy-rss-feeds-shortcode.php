@@ -37,6 +37,16 @@ function feedzy_rss( $atts, $content = '' ) {
 		"keywords_title" => '' 	//only display item if title contains specific keywords (comma-separated list/case sensitive)
 		), $atts ) );
 
+	if ( !empty( $feeds ) ) {
+		
+		$feedURL = explode( ',', $feeds );
+
+		if ( count( $feedURL ) === 1 ) {
+			$feedURL = $feedURL[0];
+		}
+		
+	}
+	
 	if ( $max == '0' ) {
 		$max = '999';
 	} else if ( empty( $max ) || !ctype_digit( $max ) ) {
@@ -66,16 +76,6 @@ function feedzy_rss( $atts, $content = '' ) {
 	
 	} else {
 		$default = plugins_url( 'img/feedzy-default.jpg', __FILE__ );
-	}
-
-	if ( !empty( $feeds ) ) {
-		
-		$feedURL = explode( ',', $feeds );
-
-		if ( count( $feedURL ) === 1 ) {
-			$feedURL = $feedURL[0];
-		}
-		
 	}
  
  	//Load SimplePie Instance
@@ -205,7 +205,7 @@ function feedzy_rss( $atts, $content = '' ) {
 			$paddinBottom = number_format( (25 / 150) * $sizes['height'], 0 );
 
 			//Build element DOM
-			$content .= '<div class="rss_item" style="padding: ' . $paddinTop . 'px 0 ' . $paddinBottom . 'px">';
+			$content .= '<div class="' . feedzy_classes_item() . '" style="padding: ' . $paddinTop . 'px 0 ' . $paddinBottom . 'px">';
 			
 			if ( $thumb == 'yes' || $thumb == 'auto' ) {
 				
@@ -216,8 +216,9 @@ function feedzy_rss( $atts, $content = '' ) {
 					$contentThumb .= '<div class="rss_image" style="width:' . $sizes['width'] . 'px; height:' . $sizes['height'] . 'px;">';
 					$contentThumb .= '<a href="' . $item->get_permalink() . '" target="' . $target . '" title="' . $item->get_title() . '" >';
 				
-					if ( !empty( $thethumbnail  )) {
+					if ( !empty( $thethumbnail )) {
 						
+						$thethumbnail = feedzy_image_encode( $thethumbnail );
 						$contentThumb .= '<span style="width:' . $sizes['width'] . 'px; height:' . $sizes['height'] . 'px; background-image:  none, url(' . $thethumbnail . '), url(' . $default . ');" alt="' . $item->get_title() . '"></span/>';
 					
 					} else if ( empty( $thethumbnail ) && $thumb == 'yes' ) {

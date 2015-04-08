@@ -17,28 +17,67 @@ add_action( 'wp_footer', 'feedzy_print_custom_style' );
 
 
 /***************************************************************
- * Get an image from the feed
+ * Feed item container class
  ***************************************************************/
-function feedzy_returnImage ($text) {
-	$text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
-	$pattern = "/<img[^>]+\>/i";
-	preg_match($pattern, $text, $matches);
-	$text = $matches[0];
-	return $text;
+function feedzy_classes_item(){
+	$classes = array( 'rss_item' );
+	$classes = apply_filters( 'feedzy_add_classes_item', $classes );
+	$classes = implode( ' ', $classes );
+	return $classes;
 }
- 
+
 
 /***************************************************************
- * Filter out image url which we got from previous returnImage() function
+ * Get an image from the feed
  ***************************************************************/
-function feedzy_scrapeImage($text) {
+function feedzy_returnImage( $string ) {
+	$img = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
+	$pattern = "/<img[^>]+\>/i";
+	preg_match( $pattern, $img, $matches );
+	if( isset( $matches[0] ) ){
+		$string = $matches[0];
+	}
+	return $string;
+}
+
+function feedzy_scrapeImage( $string ) {
+	$link = '';
 	$pattern = '/src=[\'"]?([^\'" >]+)[\'" >]/';     
-	preg_match($pattern, $text, $link);
-	$link = $link[1];
-	$link = urldecode($link);
+	preg_match( $pattern, $string, $link );
+	if( isset( $link[1] ) ){
+		$link = $link[1];
+		$link = urldecode( $link );
+	}
 	return $link;
 }
 
+/***************************************************************
+ * Image name encode + get image url if in url param
+ ***************************************************************/
+function feedzy_image_encode( $string ) {
+	
+	//Check if img url is set as an URL parameter
+	$url_tab = parse_url( $string );
+	if( isset( $url_tab['query'] ) ){
+		preg_match_all( '/(http|https):\/\/[^ ]+(\.gif|\.GIF|\.jpg|\.JPG|\.jpeg|\.JPEG|\.png|\.PNG)/', $url_tab['query'], $imgUrl );
+		if( isset( $imgUrl[0][0] ) ){
+			$string = $imgUrl[0][0];
+		}
+	}
+	
+	//Encode image name only en keep extra parameters
+	$query = '';
+	$url_tab = parse_url( $string );
+	if( isset( $url_tab['query'] ) ){
+		$query = '?' . $url_tab['query'];
+	}
+	$path_parts = pathinfo( $string );
+	$path = $path_parts['dirname'];
+	$file = $path_parts['filename'] . '.' . pathinfo( $url_tab['path'], PATHINFO_EXTENSION );
+
+	//Return a well encoded image url
+	return $path . '/' . rawurlencode( $file ) . $query;
+}
 
 /***************************************************************
  * Filter feed description input
