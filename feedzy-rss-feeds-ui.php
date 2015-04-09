@@ -1,5 +1,13 @@
 <?php
 /***************************************************************
+ * SECURITY : Exit if accessed directly
+***************************************************************/
+if ( !defined( 'ABSPATH' ) ) {
+	die( 'Direct access not allowed!' );
+}
+
+
+/***************************************************************
  * Hooks custom TinyMCE button function
  ***************************************************************/ 
 function feedzy_add_mce_button() {

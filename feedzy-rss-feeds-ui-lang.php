@@ -1,5 +1,13 @@
 <?php
 /***************************************************************
+ * SECURITY : Exit if accessed directly
+***************************************************************/
+if ( !defined( 'ABSPATH' ) ) {
+	die( 'Direct access not allowed!' );
+}
+
+
+/***************************************************************
  * Translation for TinyMCE
  ***************************************************************/ 
 
@@ -24,6 +32,7 @@ function feedzy_tinymce_translation() {
 		'text_default' 	=> __('Do not specify', 'feedzy_rss_translate'),
 		'text_no' 		=> __('No', 'feedzy_rss_translate'),
 		'text_yes' 		=> __('Yes', 'feedzy_rss_translate'),
+		'text_auto' 	=> __('Auto', 'feedzy_rss_translate')
     );
     $locale = _WP_Editors::$mce_locale;
     $translated = 'tinyMCE.addI18n("' . $locale . '.feedzy_tinymce_plugin", ' . json_encode( $strings ) . ");\n";
