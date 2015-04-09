@@ -3,7 +3,7 @@
  * SECURITY : Exit if accessed directly
 ***************************************************************/
 if ( !defined( 'ABSPATH' ) ) {
-	die( 'Direct acces not allowed!' );
+	die( 'Direct access not allowed!' );
 }
 
 
@@ -124,80 +124,7 @@ function feedzy_rss( $atts, $content = '' ) {
 
 			//Fetch image thumbnail
 			if ( $thumb == 'yes' || $thumb == 'auto' ) {
-				$thethumbnail = "";
-
-
-				if ( $enclosures = $item->get_enclosures() ) {
-					
-					foreach( (array) $enclosures as $enclosure ){
-
-						//item thumb
-						if ( $thumbnail = $enclosure->get_thumbnail() ) {
-							$thethumbnail = $thumbnail;
-						}
-	
-						//media:thumbnail
-						if ( isset( $enclosure->thumbnails ) ) {
-	
-							foreach ( (array) $enclosure->thumbnails as $thumbnail ) {
-								$thethumbnail = $thumbnail;
-							}
-							
-						}
-	
-						//enclosure
-						if ( $thumbnail = $enclosure->embed() ) {
-	
-							$pattern = '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
-	
-							if ( preg_match( $pattern, $thumbnail, $matches ) ) {
-								$thethumbnail = $matches[0];
-							}
-							
-						}
-	
-						//media:content
-						foreach ( (array) $enclosure->get_link() as $thumbnail ) {
-	
-							$pattern = '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
-							$imgsrc = $thumbnail;
-	
-	
-							if ( preg_match( $pattern, $imgsrc, $matches ) ) {
-								$thethumbnail = $matches[0];
-								break;
-							}
-							
-						}
-						
-						//break loop if thumbnail found
-						if ( ! empty( $thethumbnail ) ) {
-							break;
-						}
-
-					}
-					
-				}
-
-
-				//content image
-				if ( empty( $thethumbnail ) ) {
-
-					$feedDescription = $item->get_content();
-					$image = feedzy_returnImage( $feedDescription );
-					$thethumbnail = feedzy_scrapeImage( $image );
-					
-				}
-
-				//description image
-				if ( empty( $thethumbnail ) ) {
-					
-					$feedDescription = $item->get_description();
-					$image = feedzy_returnImage( $feedDescription );
-					$thethumbnail = feedzy_scrapeImage( $image );
-				
-				}
-				
+				$thethumbnail = feedzy_retrieve_image( $item );
 			}
 
 			//Padding ratio based on image size

@@ -1,5 +1,13 @@
 <?php
 /***************************************************************
+ * SECURITY : Exit if accessed directly
+***************************************************************/
+if ( !defined( 'ABSPATH' ) ) {
+	die( 'Direct access not allowed!' );
+}
+
+
+/***************************************************************
  * Enqueue feedzy CSS
  ***************************************************************/
 function feedzy_register_custom_style() {
@@ -28,7 +36,85 @@ function feedzy_classes_item(){
 
 
 /***************************************************************
- * Get an image from the feed
+ * Retrive image from the item object
+ ***************************************************************/
+function feedzy_retrieve_image( $item ) {
+	$thethumbnail = "";
+	if ( $enclosures = $item->get_enclosures() ) {
+		
+		foreach( (array) $enclosures as $enclosure ){
+
+			//item thumb
+			if ( $thumbnail = $enclosure->get_thumbnail() ) {
+				$thethumbnail = $thumbnail;
+			}
+
+			//media:thumbnail
+			if ( isset( $enclosure->thumbnails ) ) {
+
+				foreach ( (array) $enclosure->thumbnails as $thumbnail ) {
+					$thethumbnail = $thumbnail;
+				}
+				
+			}
+
+			//enclosure
+			if ( $thumbnail = $enclosure->embed() ) {
+
+				$pattern = '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
+
+				if ( preg_match( $pattern, $thumbnail, $matches ) ) {
+					$thethumbnail = $matches[0];
+				}
+				
+			}
+
+			//media:content
+			foreach ( (array) $enclosure->get_link() as $thumbnail ) {
+
+				$pattern = '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
+				$imgsrc = $thumbnail;
+
+
+				if ( preg_match( $pattern, $imgsrc, $matches ) ) {
+					$thethumbnail = $matches[0];
+					break;
+				}
+				
+			}
+			
+			//break loop if thumbnail found
+			if ( ! empty( $thethumbnail ) ) {
+				break;
+			}
+
+		}
+		
+	}
+
+
+	//content image
+	if ( empty( $thethumbnail ) ) {
+
+		$feedDescription = $item->get_content();
+		$image = feedzy_returnImage( $feedDescription );
+		$thethumbnail = feedzy_scrapeImage( $image );
+		
+	}
+
+	//description image
+	if ( empty( $thethumbnail ) ) {
+		
+		$feedDescription = $item->get_description();
+		$image = feedzy_returnImage( $feedDescription );
+		$thethumbnail = feedzy_scrapeImage( $image );
+	
+	}
+
+	return $thethumbnail;
+}
+/***************************************************************
+ * Get an image from a string
  ***************************************************************/
 function feedzy_returnImage( $string ) {
 	$img = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
@@ -66,18 +152,21 @@ function feedzy_image_encode( $string ) {
 	}
 	
 	//Encode image name only en keep extra parameters
-	$query = '';
+	$query = $extention = '';
 	$url_tab = parse_url( $string );
 	if( isset( $url_tab['query'] ) ){
 		$query = '?' . $url_tab['query'];
 	}
 	$path_parts = pathinfo( $string );
 	$path = $path_parts['dirname'];
-	$file = $path_parts['filename'] . '.' . pathinfo( $url_tab['path'], PATHINFO_EXTENSION );
-	$file = rawurldecode( $file );
+	$file = rawurldecode( $path_parts['filename'] );
+	$extention = pathinfo( $url_tab['path'], PATHINFO_EXTENSION );
+	if( !empty( $extention ) ){
+		$extention =  '.' . $extention;
+	}
 	
 	//Return a well encoded image url
-	return $path . '/' . rawurlencode( $file ) . $query;
+	return $path . '/' . rawurlencode( $file ) . $extention . $query;
 }
 
 /***************************************************************
