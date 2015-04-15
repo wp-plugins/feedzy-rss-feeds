@@ -3,8 +3,8 @@ Contributors: briKou
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Z6YVM63739Y8
 Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator, tinyMCE, WYSIWYG, MCE, UI, flux, plugin, WordPress, widget, importer, XML, ATOM, API, parser
 Requires at least: 3.7
-Tested up to: 4.1
-Stable tag: 2.4.3
+Tested up to: 4.2
+Stable tag: 2.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,6 +104,10 @@ Yes it is.
 
 
 == Changelog ==
+
+= 2.4.4 =
+* Tested on WP 4.2 with success!
+* readme.txt update
 
 = 2.4.3 =
 * Improve image fetching (again...)
