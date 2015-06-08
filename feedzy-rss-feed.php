@@ -5,11 +5,26 @@
  * Description: FEEDZY RSS Feeds is a small and lightweight plugin. Fast and easy to use, it aggregates RSS feeds into your WordPress site through simple shortcodes.				
  * Author: Brice CAPOBIANCO
  * Author URI: http://b-website.com/
- * Version: 2.4.4
+ * Version: 2.5
  * Text Domain: feedzy_rss_translate
  * Domain Path: /langs
  */
 
+/*  Copyright 2015  Brice CAPOBIANCO  (contact : http://b-website.com/contact)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License, version 2, as 
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
 /***************************************************************
  * SECURITY : Exit if accessed directly

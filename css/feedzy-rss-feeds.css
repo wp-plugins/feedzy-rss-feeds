@@ -3,7 +3,12 @@
  * Plugin URI: http://b-website.com/
  * Author: Brice CAPOBIANCO
  */
+.feedzy-rss > ul {
+	margin: 0;
+	padding: 0;
+}
 .feedzy-rss .rss_item {
+	list-style: none;
 	border-bottom: 1px solid #eee;
 }
 .feedzy-rss .rss_item .title {
@@ -18,11 +23,13 @@
 	float: left;
 	text-decoration: none;
 	border: none;
+	position:relative;
 }
 .feedzy-rss .rss_item .rss_image span{
 	display:inline-block;
 	background-size: cover;
 	background-position: 50%;
+	position: absolute;
 }
 .feedzy-rss .rss_item .rss_image {
 	margin: 0.3em 1em 0 0;

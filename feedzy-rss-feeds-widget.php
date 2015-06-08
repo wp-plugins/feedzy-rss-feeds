@@ -192,7 +192,7 @@ class feedzy_wp_widget extends WP_Widget {
 		//Fix for versions before 2.3.1
 		if ( $instance['thumb'] == '1' ){
 			$instance['thumb'] = 'yes';
-		} else if ( $thumb == '0' ) {
+		} else if ( $instance['thumb'] == '0' ) {
 			$instance['thumb'] = 'no';
 		}
 
