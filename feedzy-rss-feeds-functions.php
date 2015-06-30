@@ -56,6 +56,7 @@ function feedzy_retrieve_image( $item ) {
 	if ( $enclosures = $item->get_enclosures() ) {
 		
 		foreach( (array) $enclosures as $enclosure ){
+			
 
 			//item thumb
 			if ( $thumbnail = $enclosure->get_thumbnail() ) {
@@ -73,7 +74,8 @@ function feedzy_retrieve_image( $item ) {
 
 			//enclosure
 			if ( $thumbnail = $enclosure->embed() ) {
-
+				
+				
 				$pattern = '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
 
 				if ( preg_match( $pattern, $thumbnail, $matches ) ) {
@@ -82,14 +84,14 @@ function feedzy_retrieve_image( $item ) {
 				
 			}
 
-			//media:content
+			//media:content && strpos( $enclosure->type, 'image' ) !== false 
 			foreach ( (array) $enclosure->get_link() as $thumbnail ) {
 
 				$pattern = '/https?:\/\/.*\.(?:jpg|JPG|jpe|JPE|jpeg|JPEG|gif|GIF|png|PNG)/iU';
 				$imgsrc = $thumbnail;
 
 
-				if ( preg_match( $pattern, $imgsrc, $matches ) ) {
+				if ( preg_match( $pattern, $imgsrc, $matches )  ) {
 					$thethumbnail = $matches[0];
 					break;
 				}
@@ -134,9 +136,9 @@ function feedzy_returnImage( $string ) {
 	$pattern = "/<img[^>]+\>/i";
 	preg_match( $pattern, $img, $matches );
 	if( isset( $matches[0] ) ){
-		$string = $matches[0];
+		return $matches[0];
 	}
-	return $string;
+	return;
 }
 
 function feedzy_scrapeImage( $string ) {

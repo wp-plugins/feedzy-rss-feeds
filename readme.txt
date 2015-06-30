@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: RSS, SimplePie, shortcode, feed, thumbnail, image, rss feeds, aggregator, tinyMCE, WYSIWYG, MCE, UI, flux, plugin, WordPress, widget, importer, XML, ATOM, API, parser
 Requires at least: 3.7
 Tested up to: 4.2
-Stable tag: 2.4.5
+Stable tag: 2.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,9 +80,9 @@ By activating this plugin, your cover picture will be inserted into your RSS fee
 * English
 * French
 * Serbian [Borisa Djuraskovic](http://www.webhostinghub.com/ "Borisa Djuraskovic")
+* Japanese [sama55](http://askive.cmsbox.jp/ "sama55")
 
 Become a translator and send me your translation! [Contact-me](http://b-website.com/contact "Contact")
-
 
 == Installation ==
 
@@ -105,6 +105,11 @@ Yes it is.
 
 
 == Changelog ==
+
+= 2.5.1 =
+* Japanese translation thanks to [sama55](http://askive.cmsbox.jp/ "sama55")
+* Image optimisation (feedzy-default.jpg)
+* Improve image's fetching to avoid catching audio or video files from item description
 
 = 2.5 =
 * Improve author name fetching
