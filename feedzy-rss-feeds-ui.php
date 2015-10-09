@@ -21,12 +21,12 @@ function feedzy_add_mce_button() {
 		add_filter( 'mce_buttons', 'feedzy_register_mce_button' );
 		
 		// Load stylesheet for tinyMCE button only
-		wp_enqueue_style( 'feedzy-rss-feeds', plugin_dir_url( __FILE__ ) . 'css/feedzy-rss-feeds.css', array(), NULL, NULL );
-		wp_enqueue_script( 'feedzy-rss-feeds-ui-scripts', plugin_dir_url( __FILE__ ) . 'js/feedzy-rss-feeds-ui-scripts.js', array( 'jquery' ), NULL );
+		wp_enqueue_style( 'feedzy-rss-feeds', plugin_dir_url( __FILE__ ) . 'css/feedzy-rss-feeds.css', array(), '2.6.1' );
+		wp_enqueue_script( 'feedzy-rss-feeds-ui-scripts', plugin_dir_url( __FILE__ ) . 'js/feedzy-rss-feeds-ui-scripts.js', array( 'jquery' ), '2.6.1' );
 	}
 	
 }
-add_action('admin_head', 'feedzy_add_mce_button');
+add_action('init', 'feedzy_add_mce_button');
 
 
 /***************************************************************

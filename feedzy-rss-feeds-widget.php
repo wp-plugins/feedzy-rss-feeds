@@ -15,7 +15,7 @@ class feedzy_wp_widget extends WP_Widget {
 
 	//Constructor
 	function feedzy_wp_widget() {
-        parent::WP_Widget(false, $name = __('Feedzy RSS Feeds', 'feedzy_wp_widget') );
+        parent::__construct(false, $name = __('Feedzy RSS Feeds', 'feedzy_wp_widget') );
     }
 
 	//Widget form creation

@@ -11,7 +11,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * Enqueue feedzy CSS
  ***************************************************************/
 function feedzy_register_custom_style() {
-	wp_register_style( 'feedzy-style', plugins_url( 'css/feedzy-rss-feeds.css', __FILE__ ), NULL, NULL );
+	wp_register_style( 'feedzy-style', plugins_url( 'css/feedzy-rss-feeds.css', __FILE__ ), array(), '2.6.1' );
 }
 function feedzy_print_custom_style() {
 	global $feedzyStyle;
@@ -53,6 +53,7 @@ add_filter( 'feedzy_item_attributes', 'feedzy_classes_item' );
  ***************************************************************/
 function feedzy_retrieve_image( $item ) {
 	$thethumbnail = "";
+	//var_dump($item);
 	if ( $enclosures = $item->get_enclosures() ) {
 		
 		foreach( (array) $enclosures as $enclosure ){
@@ -97,7 +98,7 @@ function feedzy_retrieve_image( $item ) {
 				}
 				
 			}
-			
+
 			//break loop if thumbnail found
 			if ( ! empty( $thethumbnail ) ) {
 				break;
@@ -107,13 +108,19 @@ function feedzy_retrieve_image( $item ) {
 		
 	}
 
-
+	//xmlns:itunes podcast
+	if ( empty( $thethumbnail ) ) {
+		$data = $item->get_item_tags('http://www.itunes.com/dtds/podcast-1.0.dtd', 'image');
+		if ( isset( $data['0']['attribs']['']['href'] ) && !empty( $data['0']['attribs']['']['href'] ) ){
+			$thethumbnail = $data['0']['attribs']['']['href'];
+		}
+	}
+	
 	//content image
 	if ( empty( $thethumbnail ) ) {
 
 		$feedDescription = $item->get_content();
-		$image = feedzy_returnImage( $feedDescription );
-		$thethumbnail = feedzy_scrapeImage( $image );
+		$thethumbnail = feedzy_returnImage( $feedDescription );
 		
 	}
 
@@ -121,12 +128,17 @@ function feedzy_retrieve_image( $item ) {
 	if ( empty( $thethumbnail ) ) {
 		
 		$feedDescription = $item->get_description();
-		$image = feedzy_returnImage( $feedDescription );
-		$thethumbnail = feedzy_scrapeImage( $image );
+		$thethumbnail = feedzy_returnImage( $feedDescription );
 	
 	}
 
 	return $thethumbnail;
+}
+
+function get_app_image() 
+{
+    $data = $this->get_item_tags(SIMPLE_NAMESPACE_IM, 'image');
+    return $data['0']['data'];
 }
 /***************************************************************
  * Get an image from a string
@@ -136,7 +148,19 @@ function feedzy_returnImage( $string ) {
 	$pattern = "/<img[^>]+\>/i";
 	preg_match( $pattern, $img, $matches );
 	if( isset( $matches[0] ) ){
-		return $matches[0];
+		$blacklistCount = 0;
+		foreach( $matches as $matche){
+			$link = feedzy_scrapeImage( $matche );
+			$blacklist = array();
+			$blacklist = apply_filters( 'feedzy_feed_blacklist_images', feedzy_blacklist_images( $blacklist ) );
+			foreach( $blacklist as $string ) {
+				if ( strpos( $link, $string ) !== false) {
+					$blacklistCount++;
+				}
+			}
+			if( $blacklistCount == 0) break;
+		}
+		if( $blacklistCount == 0) return $link;
 	}
 	return;
 }
@@ -151,6 +175,40 @@ function feedzy_scrapeImage( $string ) {
 	}
 	return $link;
 }
+
+
+function feedzy_blacklist_images( $blacklist ) {
+	$blacklist = array(
+		'frownie.png',
+		'icon_arrow.gif',
+		'icon_biggrin.gif',
+		'icon_confused.gif',
+		'icon_cool.gif',
+		'icon_cry.gif',
+		'icon_eek.gif',
+		'icon_evil.gif',
+		'icon_exclaim.gif',
+		'icon_idea.gif',
+		'icon_lol.gif',
+		'icon_mad.gif',
+		'icon_mrgreen.gif',
+		'icon_neutral.gif',
+		'icon_question.gif',
+		'icon_razz.gif',
+		'icon_redface.gif',
+		'icon_rolleyes.gif',
+		'icon_sad.gif',
+		'icon_smile.gif',
+		'icon_surprised.gif',
+		'icon_twisted.gif',
+		'icon_wink.gif',
+		'mrgreen.png',
+		'rolleyes.png',
+		'simple-smile.png',
+	);
+	return $blacklist;
+}
+
 
 /***************************************************************
  * Image name encode + get image url if in url param
