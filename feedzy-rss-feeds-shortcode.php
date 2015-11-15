@@ -39,7 +39,12 @@ function feedzy_rss( $atts, $content = '' ) {
 
 	if ( !empty( $feeds ) ) {
 		$feeds = rtrim( $feeds, ',' );
-		$feedURL = explode( ',', $feeds );
+		$feeds = explode( ',', $feeds );
+		
+		//Remove SSL from HTTP request to prevent fetching errors
+		foreach( $feeds as $feed ){
+			$feedURL[] = preg_replace("/^https:/i", "http:", $feed);
+		}
 
 		if ( count( $feedURL ) === 1 ) {
 			$feedURL = $feedURL[0];
@@ -76,7 +81,7 @@ function feedzy_rss( $atts, $content = '' ) {
 		$default = $default;
 	
 	} else {
-		$default = plugins_url( 'img/feedzy-default.jpg', __FILE__ );
+		$default = apply_filters( 'feedzy_default_image', $default );
 	}
  
  	//Load SimplePie Instance

@@ -6,6 +6,13 @@ if ( !defined( 'ABSPATH' ) ) {
 	die( 'Direct access not allowed!' );
 }
 
+/***************************************************************
+ * Feed item container class
+ ***************************************************************/
+function feedzy_define_default_image( $imageSrc ){
+	return plugins_url( 'img/feedzy-default.jpg', __FILE__ );
+}
+add_filter( 'feedzy_default_image', 'feedzy_define_default_image' );
 
 /***************************************************************
  * Enqueue feedzy CSS
@@ -154,7 +161,7 @@ function feedzy_returnImage( $string ) {
 			$blacklist = array();
 			$blacklist = apply_filters( 'feedzy_feed_blacklist_images', feedzy_blacklist_images( $blacklist ) );
 			foreach( $blacklist as $string ) {
-				if ( strpos( $link, $string ) !== false) {
+				if ( strpos( (string) $link, $string ) !== false) {
 					$blacklistCount++;
 				}
 			}
@@ -165,13 +172,11 @@ function feedzy_returnImage( $string ) {
 	return;
 }
 
-function feedzy_scrapeImage( $string ) {
-	$link = '';
+function feedzy_scrapeImage( $string, $link = '' ) {
 	$pattern = '/src=[\'"]?([^\'" >]+)[\'" >]/';     
 	preg_match( $pattern, $string, $link );
 	if( isset( $link[1] ) ){
-		$link = $link[1];
-		$link = urldecode( $link );
+		$link = urldecode( $link[1] );
 	}
 	return $link;
 }
